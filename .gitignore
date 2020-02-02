@@ -1,0 +1,9 @@
+config.toml
+dcrstakepool
+.vscode/
+.idea/
+controllers/config.go*
+testing/
+*.orig
+debug
+public/**/*.gz

@@ -1,0 +1,183 @@
+syntax = "proto3";
+
+package stakepoolrpc;
+
+service StakepooldService {
+	rpc GetAddedLowFeeTickets (GetAddedLowFeeTicketsRequest) returns (GetAddedLowFeeTicketsResponse);
+	rpc GetIgnoredLowFeeTickets (GetIgnoredLowFeeTicketsRequest) returns (GetIgnoredLowFeeTicketsResponse);
+	rpc GetLiveTickets (GetLiveTicketsRequest) returns (GetLiveTicketsResponse);
+	rpc SetAddedLowFeeTickets (SetAddedLowFeeTicketsRequest) returns (SetAddedLowFeeTicketsResponse);
+	rpc SetUserVotingPrefs (SetUserVotingPrefsRequest) returns (SetUserVotingPrefsResponse);
+	rpc ImportNewScript (ImportNewScriptRequest) returns (ImportNewScriptResponse);
+	rpc ImportMissingScripts (ImportMissingScriptsRequest) returns (ImportMissingScriptsResponse);
+	rpc StakePoolUserInfo (StakePoolUserInfoRequest) returns (StakePoolUserInfoResponse);
+	rpc WalletInfo (WalletInfoRequest) returns (WalletInfoResponse);
+	rpc ValidateAddress (ValidateAddressRequest) returns (ValidateAddressResponse);
+	rpc AddMissingTicket (AddMissingTicketRequest) returns (AddMissingTicketResponse);
+	rpc GetTickets (GetTicketsRequest) returns (GetTicketsResponse);
+	rpc ListScripts (ListScriptsRequest) returns (ListScriptsResponse);
+	rpc AccountSyncAddressIndex (AccountSyncAddressIndexRequest) returns (AccountSyncAddressIndexResponse);
+	rpc CreateMultisig (CreateMultisigRequest) returns (CreateMultisigResponse);
+	rpc GetStakeInfo (GetStakeInfoRequest) returns (GetStakeInfoResponse);
+	rpc GetColdWalletExtPub (GetColdWalletExtPubRequest) returns (GetColdWalletExtPubResponse);
+}
+
+service VersionService {
+	rpc Version (VersionRequest) returns (VersionResponse);
+}
+
+message GetAddedLowFeeTicketsRequest {}
+message GetAddedLowFeeTicketsResponse {
+	repeated Ticket tickets = 1;
+}
+
+message GetIgnoredLowFeeTicketsRequest {}
+message GetIgnoredLowFeeTicketsResponse {
+	repeated Ticket tickets = 1;
+}
+
+message GetLiveTicketsRequest {}
+message GetLiveTicketsResponse {
+	repeated Ticket tickets = 1;
+}
+
+message SetAddedLowFeeTicketsRequest {
+	repeated Ticket tickets = 1;
+}
+message SetAddedLowFeeTicketsResponse {
+}
+
+message SetUserVotingPrefsResponse {
+}
+message SetUserVotingPrefsRequest {
+	repeated UserVotingConfigEntry user_voting_config = 1;
+}
+
+message AddMissingTicketRequest {
+	bytes Hash = 1;
+}
+message AddMissingTicketResponse {
+}
+
+message GetTicketsRequest {
+	bool IncludeImmature = 1;
+}
+message GetTicketsResponse {
+	repeated bytes Tickets = 1;
+}
+
+message ListScriptsRequest {
+}
+message ListScriptsResponse {
+	repeated bytes Scripts = 1;
+}
+
+message AccountSyncAddressIndexRequest {
+	string Account = 1;
+	uint32 Branch = 2;
+	int64 Index = 3;
+}
+message AccountSyncAddressIndexResponse {
+}
+
+message ImportMissingScriptsRequest {
+	repeated bytes Scripts = 1;
+	int64 RescanHeight = 2;
+}
+message ImportMissingScriptsResponse {
+}
+
+message ImportNewScriptRequest {
+	bytes Script = 1;
+}
+message ImportNewScriptResponse {
+	int64 HeightImported = 1;
+}
+
+message StakePoolUserInfoRequest {
+	string MultiSigAddress = 1;
+}
+message StakePoolUserInfoResponse {
+	repeated StakePoolUserTicket Tickets = 1;
+	repeated string InvalidTickets = 2;
+}
+
+message WalletInfoRequest {
+}
+message WalletInfoResponse {
+	uint32 VoteVersion = 1;
+	bool DaemonConnected = 2;
+	bool Unlocked = 3;
+	bool Voting = 4;
+}
+
+message ValidateAddressRequest {
+	string Address = 1;
+}
+message ValidateAddressResponse {
+	bool IsMine = 1;
+	string PubKeyAddr = 2;
+}
+
+message CreateMultisigRequest {
+	repeated string Address = 1;
+}
+message CreateMultisigResponse {
+	string RedeemScript = 1;
+	string Address = 2;
+}
+
+message StakePoolUserTicket {
+	string Status = 1;
+	string Ticket = 2;
+	uint32 TicketHeight = 3;
+	string SpentBy = 4;
+	uint32 SpentByHeight = 5;
+}
+
+message Ticket {
+	string Address = 1;
+	bytes Hash = 2;
+}
+
+message UserVotingConfigEntry {
+  int64 UserId = 1;
+  string MultiSigAddress = 2;
+  int64 VoteBits = 3;
+  int64 VoteBitsVersion = 4;
+}
+
+message VersionRequest {}
+message VersionResponse {
+	string version_string = 1;
+	uint32 major = 2;
+	uint32 minor = 3;
+	uint32 patch = 4;
+	string prerelease = 5;
+	string build_metadata = 6;
+}
+
+message GetStakeInfoRequest {}
+message GetStakeInfoResponse {
+	int64 BlockHeight = 1;
+	double Difficulty = 2;
+	double TotalSubsidy = 3;
+	uint32 OwnMempoolTix = 4;
+	uint32 Immature = 5;
+	uint32 Unspent = 6;
+	uint32 Voted = 7;
+	uint32 Revoked = 8;
+	uint32 UnspentExpired = 9;
+	uint32 PoolSize = 10;
+	uint32 AllMempoolTix = 11;
+	uint32 Live = 12;
+	double ProportionLive = 13;
+	uint32 Missed = 14;
+	double ProportionMissed = 15;
+	uint32 Expired = 16;
+}
+
+message GetColdWalletExtPubRequest {}
+message GetColdWalletExtPubResponse {
+	string ColdWalletExtPub = 1;
+}

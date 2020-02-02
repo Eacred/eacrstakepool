@@ -1,0 +1,123 @@
+{{define "admin/tickets"}}
+<section class="site-content">
+	<div class="container container--narrow">
+
+		{{range .FlashError}}
+			<div class="row">
+				<div class="snackbar snackbar-ticket-failed">
+					<div class="snackbar-message">
+						<div class="snackbar-close-button-top d-none"></div>
+						<p>{{.}}</p>
+					</div>
+				</div>
+			</div>
+		{{end}}
+
+		{{range .FlashSuccess}}
+			<div class="row">
+				<div class="snackbar snackbar-ticket-success">
+					<div class="snackbar-message">
+						<div class="snackbar-close-button-top d-none"></div>
+						<p>{{.}}</p>
+					</div>
+				</div>
+			</div>
+		{{end}}
+
+		<div class="p-x0">
+			<div class="block__title">
+				<h1 class="d-flex justify-content-between align-items-end">
+					<span>Ignored Low Fee Tickets</span>
+						{{if gt (len .IgnoredLowFeeTickets) 1 }}
+						<div class="text--size-13">
+							<a id="select_all_ignored" class="js-only d-none" href="#">Select all</a>
+						</div>
+						{{end}}
+				</h1>	
+			</div>
+
+			{{with .IgnoredLowFeeTickets}}
+				<form id="addTicketsForm" method="post">
+					<div class="mb-3">
+						<div class="bg-white">
+							<table id="ignored_table" class="table">
+								<tbody>
+									{{ range $tickethash, $msa := .}}
+									<tr>
+										<td class="pl-sm-5 pl-4 align-middle"><img src="/assets/images/group-1119.svg" alt=""></th>
+										<td class="align-middle"><pre class="m-0">{{printf "%.16s" $tickethash}}...</pre></td>
+										<td class="align-middle"><pre class="m-0">{{$msa}}</pre></td>
+										<td class="align-middle"><a href="{{ $.DCRDataURL }}/tx/{{$tickethash}}" rel="noopener noreferrer">Block Explorer</a></td>
+										<td class="align-middle">
+											<label class="control control-checkbox">
+												<input type="checkbox" name="tickets[]" value="{{$tickethash}}">
+												<div class="control_indicator"></div>
+											</label>
+										</td>
+									</tr>
+									{{end}}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<input type="hidden" name="action" value="add">
+			{{ $.csrfField }}
+					<input id="addTickets" type="submit" class="btn" value="Add Tickets To Live Voting List" />
+				</form>
+			{{else}}
+				<div class="col-12 block__description--white">
+					<p>Currently there are no ignored low fee tickets.</p>
+				</div>
+			{{end}}
+		</div>
+
+		<div class="p-x0">
+			<div class="block__title">
+				<h1 class="d-flex justify-content-between align-items-end">
+					<span>Added Low Fee Tickets</span>
+					{{if gt (len .AddedLowFeeTickets) 1 }}
+					<div class="text--size-13">
+						<a id="select_all_added" class="js-only d-none" href="#">Select all</a>
+					</div>
+					{{end}}
+				</h1>
+			</div>
+			
+			{{with .AddedLowFeeTickets}}
+				<form id="removeTicketsForm" method="post">
+					<div class="mb-3">
+						<div class="bg-white">
+							<table id="added_table" class="table">
+								<tbody>
+									{{ range $tickethash, $msa := .}}
+									<tr>
+										<td class="pl-sm-5 pl-4 align-middle"><img src="/assets/images/group-1119.svg" alt=""></th>
+										<td class="align-middle"><pre class="m-0">{{printf "%.16s" $tickethash}}...</pre></td>
+										<td class="align-middle"><pre class="m-0">{{$msa}}</pre></td>
+										<td class="align-middle"><a href="{{ $.DCRDataURL }}/tx/{{$tickethash}}" rel="noopener noreferrer">Block Explorer</a></td>
+										<td class="align-middle">
+											<label class="control control-checkbox">
+												<input type="checkbox" name="tickets[]" value="{{$tickethash}}">
+												<div class="control_indicator"></div>
+											</label>
+										</td>
+									</tr>
+									{{end}}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<input type="hidden" name="action" value="remove">
+					{{ $.csrfField }}
+					<input id="rmTickets" type="submit" class="btn" value="Remove Tickets From Live Voting List" />
+				</form>
+			{{else}}
+				<div class="col-12 block__description--white">
+					<p>Currently there are no added low fee tickets.</p>
+				</div>
+			{{end}}
+		</div>
+
+	</div>
+</section>
+{{end}}

@@ -1,0 +1,149 @@
+{{define "stats"}}
+<section class="site-content">
+	<div class="container container--narrow">
+		<div class="row mx-3">
+			<section class="block">
+				<div class="col-12 block__title">
+					<h1><span>Pool Stats</span></h1>
+				</div>
+				<div class="col-12 mb-4">
+					<div class="row">
+						<div class="col text-center bg-white py-2">
+							<p class="font-weight-bold text--size-13 mb-0">Live Tickets</p>
+							<p class="mb-0 text--size-13">{{ .StakeInfo.Live }}</p>
+						</div>
+						<div class="col text-center bg-white mb-3 py-2">
+							<p class="font-weight-bold text--size-13 mb-0">Expired Tickets</p>
+							<p class="mb-0 text--size-13">{{ .StakeInfo.Expired }}</p>
+						</div>
+						<div class="col text-center bg-white py-2">
+							<p class="font-weight-bold text--size-13 mb-0">Voted Tickets</p>
+							<p class="mb-0 text--size-13">{{ .StakeInfo.Voted }}</p>
+						</div>
+						<div class="col text-center bg-white mb-3 py-2">
+							<p class="font-weight-bold text--size-13 mb-0">Missed Tickets</p>
+							<p class="mb-0 text--size-13">{{ .StakeInfo.Missed }}</p>
+						</div>
+						<div class="col text-center bg-white mb-3 py-2">
+							<p class="font-weight-bold text--size-13 mb-0">Immature Tickets</p>
+							<p class="mb-0 text--size-13">{{ .StakeInfo.Immature }}</p>
+						</div>
+						<div class="col text-center bg-white py-2">
+							<p class="font-weight-bold text--size-13 mb-0">ProportionMissed</p>
+							<p class="mb-0 text--size-13">{{ .StakeInfo.ProportionMissed }}</p>
+						</div>
+						<div class="col text-center bg-white py-2">
+							<p class="font-weight-bold text--size-13 mb-0">Revoked Tickets</p>
+							<p class="mb-0 text--size-13">{{ .StakeInfo.Revoked }}</p>
+						</div>
+						<div class="col text-center bg-white py-2">
+							<p class="font-weight-bold text--size-13 mb-0">VSP Fees</p>
+							<p class="mb-0 text--size-13">{{ .PoolFees }}%</p>
+						</div>
+						<div class="col text-center bg-white py-2">
+							<p class="font-weight-bold text--size-13 mb-0">TotalSubsidy</p>
+							<p class="mb-0 text--size-13">{{ .StakeInfo.TotalSubsidy }}&nbsp;DCR</p>
+						</div>
+						<div class="col text-center bg-white py-2">
+							<p class="font-weight-bold text--size-13 mb-0">Total Users</p>
+							<p class="mb-0 text--size-13">{{ .UserCount }}</p>
+						</div>
+						<div class="col text-center bg-white py-2">
+							<p class="font-weight-bold text--size-13 mb-0">Active Users</p>
+							<p class="mb-0 text--size-13">{{ .UserCountActive }}</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 block__title">
+					<h1><span>Network Stats</span></h1>
+				</div>
+				<div class="col-12 mb-4">
+					<div class="row">
+						<div class="col text-center bg-white py-2">
+							<p class="font-weight-bold text--size-13 mb-0">Ticket Price</p>
+							<p class="mb-0 text--size-13"><a href="{{ $.DCRDataURL }}/charts?chart=ticket-price&zoom=month" target="_blank" rel="noopener noreferrer">{{printf "%0.2f" .StakeInfo.Difficulty}}&nbsp;DCR</a></p>
+						</div>
+						<div class="col text-center bg-white py-2">
+							<p class="font-weight-bold text--size-13 mb-0">Pool Size</p>
+							<p class="mb-0 text--size-13">{{ .StakeInfo.PoolSize }}</p>
+						</div>
+						<div class="col text-center bg-white mb-3 py-2">
+							<p class="font-weight-bold text--size-13 mb-0">Tickets in Mempool</p>
+							<p class="mb-0 text--size-13"><a href="{{ $.DCRDataURL }}/mempool" target="_blank" rel="noopener noreferrer">{{ .StakeInfo.AllMempoolTix }}</a></p>
+						</div>
+						<div class="col text-center bg-white mb-3 py-2">
+							<p class="font-weight-bold text--size-13 mb-0">Block Height</p>
+							<p class="mb-0 text--size-13">{{ .StakeInfo.BlockHeight }}</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="row js-only d-none">
+					<div class="col-md-6 col-12 mb-3">
+						<div class="row">
+							<div class="col-12 px-5 mb-3">
+								<h1>VSP Votes</h1>	
+							</div>
+							<div class="col-12 mb-5">
+								<div class="bg-white pt-4">
+									<div id="chart1" class="stats-chart"
+										data-label1="Missed"
+										data-label2="Voted"
+										data-color1="#fd714b"
+										data-color2="#41bf53"
+										data-value1="{{ .StakeInfo.Missed }}"
+										data-value2="{{ .StakeInfo.Voted }}">
+									</div>
+								</div>
+							</div>
+							<div class="col-12 px-5 mb-3">
+								<h1>VSP vs Network Proportion</h1>	
+							</div>
+							<div class="col-12 mb-3">
+								<div class="bg-white pt-4">
+									<div id="chart3" class="stats-chart"
+										data-label1="VSP Ticket Pool"
+										data-label2="Network Ticket Pool"
+										data-color1="#ffc84e"
+										data-color2="#73d5f3"
+										data-value1="{{ .StakeInfo.Live }}"
+										data-value2="{{ .StakeInfo.PoolSize }}">
+		  							</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-12 px-md-3">
+						<div class="row">
+							<div class="col-12 px-5 mb-3">
+								<h1>VSP Tickets</h1>
+							</div>
+							<div class="col-12 mb-5">
+								<div class="bg-white pt-4">
+									<div id="chart2" class="stats-chart"
+										data-label1="Immature"
+										data-label2="Live"
+										data-color1="#44d6a5"
+										data-color2="#3478f7"
+										data-value1="{{ .StakeInfo.Immature }}"
+										data-value2="{{ .StakeInfo.Live }}">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<noscript>
+					<div class="row col-12 block__description">
+						<p>Enable Javascript to view charts</p>
+					</div>
+				</noscript>
+			
+			</section>
+		</div>
+	</div>
+</section>
+{{end}}
+

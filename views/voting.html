@@ -1,0 +1,103 @@
+{{define "voting"}}
+<section class="site-content">
+	<div class="container container--narrow">
+
+		<div class="d-flex flex-column p-0 w-100">
+			{{range .FlashSuccess}}
+				<div class="snackbar snackbar-vote-success">
+					<div class="snackbar-message">
+					<div class="snackbar-close-button-top d-none"></div>
+						<p>{{.}}</p>
+					</div>
+				</div>
+			{{end}}
+
+			{{range .FlashError}}
+				<div class="snackbar snackbar-vote-failed">
+					<div class="snackbar-message">
+					<div class="snackbar-close-button-top d-none"></div>
+						<p>{{.}}</p>
+					</div>
+				</div>
+			{{end}}
+		</div>
+
+		<div class="row mx-3">
+			<section class="block">
+				<div class="col-12 block__title">
+					<h1><span>Voting Preferences (v{{.VoteVersion}})</span></h1>
+				</div>
+				<div class="col-12 block__description">
+					<p>Select the option for your tickets to vote for. On-going agendas can be tracked at <a href="https://voting.decred.org" rel="noopener noreferrer">voting.decred.org.</a></p>
+				</div>
+			</section>
+		</div>
+	
+		{{with .Agendas}}
+		<form method="post" class="form-horizontal">
+			<div class="row mx-0 row--voting">
+				{{ range $i, $data := . }}
+				<div class="col-md-6 col-12 mb-4">
+					<div class="voting_card">
+						<div class="row voting_card_desc">
+							<div class="col-6">
+								<h2>{{$data.Agenda.Vote.Id}}</h2>
+							</div>
+							{{with $data.Status}}
+							<div class="col-6 text-right">
+								<!-- labels -->
+								{{if eq . "upcoming"}}
+								<div class="indicator upcoming">Upcoming</div>
+								{{end}}
+								{{if eq . "in progress"}}
+								<div class="in-progress indicator">In Progress</div>
+								{{end}}
+								{{if eq . "finished"}}
+								<div class="finished indicator">Finished</div>
+								{{end}}
+								{{if eq . "failed"}}
+								<div class="failed indicator">Failed</div>
+								{{end}}
+								{{if eq . "locked in"}}
+								<div class="finished indicator">Locked In</div>
+								{{end}}
+							</div>
+							{{end}}
+							<div class="col-12 my-3">
+								<p class="description"><span>ID:</span> #{{$data.Agenda.Vote.Id}}</p>
+							</div>
+							<div class="col-12">
+								<p class="description">{{$data.Agenda.Vote.Description}}</p>
+							</div>
+						</div>
+						<div class="row mx-0 voting_card_options">
+							<div class="col-12 position-relative px-0">
+								<select class="form-control" name="agenda{{$i}}" id="agenda{{$i}}">
+								{{ range $j, $choicesdata := $data.Agenda.Vote.Choices}}
+									<option value="{{$choicesdata.Bits}}"{{if eq $choicesdata.Bits (index $ (print "Agenda" $i "Selected"))}} selected{{end}}>{{$choicesdata.Description}}</option>
+								{{end}}
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				{{end}}
+			</div>
+			<div class="row mx-0 row--voting">
+				<button id="updateVoting" name="updateVoting" class="btn btn-primary">Update Voting Preferences</button>
+				{{ $.csrfField }}
+			</div>
+		</form>
+		{{else}}
+		<div class="col pt-5 justify-content-center align-items-center">
+			<div class="text-center">
+				<h1>No agendas found</h1>
+			</div>
+			<div>
+				<img class="mx-auto d-block" src="/assets/images/dcr-symbols-not found.svg" alt="">
+			</div>
+		</div>
+		{{end}}
+	</div>
+</section>
+{{end}}

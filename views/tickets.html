@@ -1,0 +1,197 @@
+{{define "tickets"}}
+<section class="site-content">
+	<div class="container container--narrow">
+		<div class="row mx-3">
+
+		{{range .Flash}}
+			<div class="snackbar snackbar-ticket-failed">
+				<div class="snackbar-message">
+					<div class="snackbar-close-button-top d-none"></div>
+					<p>{{.}}</p>
+				</div>
+			</div>
+		{{end}}
+
+		{{with .TicketsInvalid}}
+			<div class="snackbar snackbar-ticket-failed">
+				<div class="snackbar-message">
+					<div class="snackbar-close-button-top d-none"></div>
+					<p class="font-weight-bold">You have {{len .}} invalid ticket{{if gt (len .) 1}}s{{end}}!</p>
+					<p>You will either need to vote {{if gt (len .) 1}}these tickets{{else}}this ticket{{end}} yourself or contact your voting service provider admin to have them add the ticket{{if gt (len .) 1}}s{{end}} to the voting service manually.</p>
+				</div>
+			</div>
+		{{end}}
+
+		<section class="block">
+				<div class="col-12 block__title">
+					<h1><span>Your Tickets</span></h1>
+				</div>
+
+				<div class="col-12 mb-4 px-0">
+					
+					<div class="accordion ticket_accordion">
+						<input id="accordion-control-1" class="accordion-control" type="checkbox" />
+						<label for="accordion-control-1">
+							<div class="accordion__toggle">
+								<div class="d-flex justify-content-between align-items-center">
+									<span><img src="/assets/images/group-1120.svg" alt="">Immature</span><div class="arrow-down"></div>
+								</div>
+							</div>
+						</label>
+							<div class="accordion__contents mb-1">
+							{{ range $i, $data := .TicketsImmature }}
+							<div>
+								<img src="/assets/images/group-1120.svg" alt="">
+								<span><pre class="m-0 d-inline">{{printf "%.16s" $data.Ticket}}...</pre></span>
+								<a style="margin-left:50px; margin-right:50px" href="{{ $.DCRDataURL }}/tx/{{$data.Ticket}}" rel="noopener noreferrer">Block Explorer</a>
+								<span>Purchase height:&nbsp;{{$data.TicketHeight}}</span>
+							</div>
+							{{else}}
+								<div class="accordion__empty">
+									<span>No immature tickets</span>
+								</div>
+							{{end}}
+							</div>
+						</div>  
+
+					<div class="accordion ticket_accordion">
+						<input id="accordion-control-2" class="accordion-control" type="checkbox" />
+						<label for="accordion-control-2">
+							<div class="accordion__toggle">
+								<div class="d-flex justify-content-between align-items-center">
+									<span><img src="/assets/images/group-1119.svg" alt="">Live</span><div class="arrow-down"></div>
+								</div>
+							</div>
+						</label>
+							<div class="accordion__contents mb-1">
+							{{ range $i, $data := .TicketsLive }}
+							<div>
+								<img src="/assets/images/group-1119.svg" alt="">
+								<span><pre class="m-0 d-inline">{{printf "%.16s" $data.Ticket}}...</pre></span>
+								<a style="margin-left:50px; margin-right:50px" href="{{ $.DCRDataURL }}/tx/{{$data.Ticket}}" rel="noopener noreferrer">Block Explorer</a>
+								<span>Purchase height:&nbsp;{{$data.TicketHeight}}</span>
+							</div>
+							{{else}}
+								<div class="accordion__empty">
+									<span>No live tickets</span>
+								</div>
+							{{end}}
+							</div>
+						</div>  
+					
+					<div class="accordion ticket_accordion">
+						<input id="accordion-control-3" class="accordion-control" type="checkbox" />
+						<label for="accordion-control-3">
+							<div class="accordion__toggle">
+								<div class="d-flex justify-content-between align-items-center">
+									<span><img src="/assets/images/symbol-8-1.svg" alt="">Voted</span><div class="arrow-down"></div>
+								</div>
+							</div>
+						</label>
+							<div class="accordion__contents mb-1">
+
+								{{ if gt .TicketsVotedCount .TicketsVotedMaxDisplay}}
+									<div class="text-center">
+										<span>You have {{.TicketsVotedCount}} voted tickets. Only the most recent {{.TicketsVotedMaxDisplay}} are shown here.</span>
+									</div>
+								{{end}}
+
+								{{ range $i, $data := .TicketsVoted }}
+								<div>
+									<img src="/assets/images/symbol-8-1.svg" alt="">
+									<span><pre class="m-0 d-inline">{{printf "%.16s" $data.Ticket}}...</pre></span>
+									<a style="margin-left:50px; margin-right:50px" href="{{ $.DCRDataURL }}/tx/{{$data.Ticket}}" rel="noopener noreferrer">Block Explorer</a>
+									<span>Voted height:&nbsp;{{$data.SpentByHeight}}</span>
+								</div>
+								{{else}}
+									<div class="accordion__empty">
+										<span>No voted tickets</span>
+									</div>
+								{{end}}
+							</div>
+					</div>  
+					
+					<div class="accordion ticket_accordion">
+						<input id="accordion-control-4" class="accordion-control" type="checkbox" />
+						<label for="accordion-control-4">
+							<div class="accordion__toggle">
+								<div class="d-flex justify-content-between align-items-center">
+									<span><img src="/assets/images/symbol-9-1.svg" alt="">Missed</span><div class="arrow-down"></div>
+								</div>
+							</div>
+						</label>
+							<div class="accordion__contents mb-1">
+								{{ range $i, $data := .TicketsMissed }}
+									<div>
+										<img src="/assets/images/symbol-9-1.svg" alt="">
+										<span><pre class="m-0 d-inline">{{printf "%.16s" $data.Ticket}}...</pre></span>
+										<a style="margin-left:50px; margin-right:50px" href="{{ $.DCRDataURL }}/tx/{{$data.Ticket}}" rel="noopener noreferrer">Block Explorer</a>
+										<span>Revoked height:&nbsp;{{$data.SpentByHeight}}</span>
+									</div>
+								{{else}}
+									<div class="accordion__empty">
+										<span>No missed tickets</span>
+									</div>
+								{{end}}
+							</div>
+					</div>  
+					
+					<div class="accordion ticket_accordion">
+						<input id="accordion-control-5" class="accordion-control" type="checkbox" />
+						<label for="accordion-control-5">
+							<div class="accordion__toggle">
+								<div class="d-flex justify-content-between align-items-center">
+									<span><img src="/assets/images/symbol-5-1.svg" alt="">Expired</span><div class="arrow-down"></div>
+								</div>
+							</div>
+						</label>
+							<div class="accordion__contents mb-1">
+								{{ range $i, $data := .TicketsExpired }}
+								<div>
+									<img src="/assets/images/symbol-5-1.svg" alt="">
+									<span><pre class="m-0 d-inline">{{printf "%.16s" $data.Ticket}}...</pre></span>
+									<a style="margin-left:50px; margin-right:50px" href="{{ $.DCRDataURL }}/tx/{{$data.Ticket}}" rel="noopener noreferrer">Block Explorer</a>
+									<span>Revoked height:&nbsp;{{$data.SpentByHeight}}</span>
+								</div>
+								{{else}}
+									<div class="accordion__empty">
+										<span>No expired tickets</span>
+									</div>
+								{{end}}
+							</div>
+					</div>  
+
+					{{with .TicketsInvalid}}
+					<div class="accordion ticket_accordion">
+						<input id="accordion-control-6" class="accordion-control" type="checkbox" />
+						<label for="accordion-control-6">
+							<div class="accordion__toggle">
+								<div class="d-flex justify-content-between align-items-center">
+									<span><img src="/assets/images/symbol-5-1-1.svg" alt="">Invalid</span><div class="arrow-down"></div>
+								</div>
+							</div>
+						</label>
+							<div class="accordion__contents mb-1">
+								{{ range $i, $data := . }}
+								<div>
+									<img src="/assets/images/symbol-5-1-1.svg" alt="">
+									<span><pre class="m-0 d-inline">{{printf "%.16s" $data.Ticket}}...</pre></span>
+									<a style="margin-left:50px; margin-right:50px" href="{{ $.DCRDataURL }}/tx/{{$data.Ticket}}" rel="noopener noreferrer">Block Explorer</a>
+								</div>
+								{{else}}
+									<div class="accordion__empty">
+										<span>No invalid tickets</span>
+									</div>
+								{{end}}
+							</div>
+							
+					</div>
+					{{end}}
+
+				</div>
+			</section>
+			
+			</div>
+		</div>
+</section>
+{{end}}
