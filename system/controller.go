@@ -5,8 +5,8 @@ import (
 	"html/template"
 	"time"
 
-	"github.com/decred/dcrstakepool/helpers"
-	"github.com/decred/dcrstakepool/models"
+	"github.com/Eacred/eacrstakepool/helpers"
+	"github.com/Eacred/eacrstakepool/models"
 	"github.com/go-gorp/gorp"
 	"github.com/gorilla/sessions"
 	"github.com/zenazn/goji/web"

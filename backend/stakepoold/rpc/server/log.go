@@ -1,11 +1,11 @@
 // Copyright (c) 2013-2015 The btcsuite developers
-// Copyright (c) 2018 The Decred developers
+// Copyright (c) 2018 The Eacred developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
 package server
 
-import "github.com/decred/slog"
+import "github.com/Eacred/slog"
 
 // log is a logger that is initialized with no output filters.  This
 // means the package will not perform any logging by default until the caller

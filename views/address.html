@@ -36,7 +36,7 @@
 							<p>If you wish to verify that this address belongs to your wallet, you may run the following command:</p>
 
 							<div class="modal-code">
-								<pre>$ dcrctl {{ if eq .Network "testnet"}}--testnet{{end}} --wallet validateaddress {{ .User.UserPubKeyAddr }}</pre>
+								<pre>$ eacrctl {{ if eq .Network "testnet"}}--testnet{{end}} --wallet validateaddress {{ .User.UserPubKeyAddr }}</pre>
 							</div>
 
 							<p>In the result, you will see fields such as “ismine” and “account” if the address is present.</p>
@@ -58,7 +58,7 @@
 			</div>
 
 			<div class="col-12 mb-4 block__key">
-				<h2>Decrediton API Key</h2>
+				<h2>Eacrediton API Key</h2>
 				<p>{{ $.APIToken }}</p>
 			</div>
 
@@ -73,7 +73,7 @@
 				<div class="container container--narrow modal-dialog px-0" role="document">
 					<div class="modal-content px-md-3 py-md-4">
 						<div class="modal-header d-md-flex d-none">
-							<h1 class="modal-title d-flex justify-content-between align-items-center" id="connectSubAddressTitle"><img src="/assets/images/info-icon-lg.svg" alt=""><span class="px-3">Buying Tickets with dcrwallet using command-line tools</span></h1>
+							<h1 class="modal-title d-flex justify-content-between align-items-center" id="connectSubAddressTitle"><img src="/assets/images/info-icon-lg.svg" alt=""><span class="px-3">Buying Tickets with eacrwallet using command-line tools</span></h1>
 							<button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true"><img src="/assets/images/close-cross-icon.svg" alt=""></span>
 							</button>
@@ -83,31 +83,31 @@
 								<button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true"><img src="/assets/images/arrow-back--blue.svg" alt=""></span>
 								</button>
-								<h1 class="modal-title" id="connectSubAddressTitle"><img src="/assets/images/info-icon-sm.svg" alt=""><span class="pl-1">Buying Tickets with dcrwallet using command-line tools</span></h1>
+								<h1 class="modal-title" id="connectSubAddressTitle"><img src="/assets/images/info-icon-sm.svg" alt=""><span class="pl-1">Buying Tickets with eacrwallet using command-line tools</span></h1>
 							</div>
 						</div>
 						<div class="modal-body mx-3 px-sm-5 px-0">
 							<blockquote class="modal-blockquote"><span>Note!</span> <br>
-							For command-line users, in-depth dcrwallet instructions can be found at <a href="https://docs.decred.org/getting-started/user-guides/dcrwallet-tickets/" rel="noopener noreferrer">docs.decred.org</a>.<br>
+							For command-line users, in-depth eacrwallet instructions can be found at <a href="https://docs.eacred.org/getting-started/user-guides/eacrwallet-tickets/" rel="noopener noreferrer">docs.eacred.org</a>.<br>
 							Below is just a brief introduction.</blockquote>
 
-							<p>Your multisignature script for delegating votes has been generated. Please first import it locally into your wallet using dcrctl for safe keeping, so you can recover your funds and vote in the unlikely event of a VSP failure:</p>
+							<p>Your multisignature script for delegating votes has been generated. Please first import it locally into your wallet using eacrctl for safe keeping, so you can recover your funds and vote in the unlikely event of a VSP failure:</p>
 
-							<p>dcrctl{{ if eq .Network "testnet"}} --testnet{{end}} --wallet importscript “script”
+							<p>eacrctl{{ if eq .Network "testnet"}} --testnet{{end}} --wallet importscript “script”
 
 							<p>For example:</p>
 
 							<div class="modal-code">
 								<p>
-									$ dcrctl{{ if eq .Network "testnet"}} --testnet{{end}} --wallet importscript {{ .User.MultiSigScript }}
+									$ eacrctl{{ if eq .Network "testnet"}} --testnet{{end}} --wallet importscript {{ .User.MultiSigScript }}
 								</p>
 							</div>
 
 							<p>After successfully importing the script into your wallet, you may purchase tickets with voting rights delegated to the VSP in either of two ways:</p>
 
-							<strong>Option A - dcrwallet - Automatic purchasing</strong>
+							<strong>Option A - eacrwallet - Automatic purchasing</strong>
 
-							<p>Stop dcrwallet if it is currently running and add the following to dcrwallet.conf:</p>
+							<p>Stop eacrwallet if it is currently running and add the following to eacrwallet.conf:</p>
 
 							<div class="modal-code">
 								<p>
@@ -123,17 +123,17 @@
 								</p>
 							</div>
 							
-							<p>Unlock dcrwallet and it will automatically purchase stake tickets delegated to the voting service address.</p>
+							<p>Unlock eacrwallet and it will automatically purchase stake tickets delegated to the voting service address.</p>
 
-							<strong>Option B - dcrwallet - Manual purchasing</strong>
+							<strong>Option B - eacrwallet - Manual purchasing</strong>
 
-							<p>Start a wallet with funds available and manually purchase tickets with the following command using dcrctl:</p>
+							<p>Start a wallet with funds available and manually purchase tickets with the following command using eacrctl:</p>
 
-							<p>dcrctl{{ if eq .Network "testnet"}} --testnet{{end}} --wallet purchaseticket "fromaccount" spendlimit minconf ticketaddress numtickets poolfeeaddress poolfeeamt</p>
+							<p>eacrctl{{ if eq .Network "testnet"}} --testnet{{end}} --wallet purchaseticket "fromaccount" spendlimit minconf ticketaddress numtickets poolfeeaddress poolfeeamt</p>
 
 							<div class="modal-code">
 								<p>
-									dcrctl{{ if eq .Network "testnet"}} --testnet{{end}} --wallet purchaseticket "default" 100 1 {{ .User.MultiSigAddress }} 1 {{ .User.UserFeeAddr }} {{ .PoolFees}}
+									eacrctl{{ if eq .Network "testnet"}} --testnet{{end}} --wallet purchaseticket "default" 100 1 {{ .User.MultiSigAddress }} 1 {{ .User.UserFeeAddr }} {{ .PoolFees}}
 								</p>
 							</div>
 
@@ -142,9 +142,9 @@
 							<strong>Voting</strong>
 
 							<p>If you wish to cast votes yourself, please review the guides
-							<a href="https://docs.decred.org/getting-started/user-guides/agenda-voting/#how-to-vote" rel="noopener noreferrer">How To Vote</a>
+							<a href="https://docs.eacred.org/getting-started/user-guides/agenda-voting/#how-to-vote" rel="noopener noreferrer">How To Vote</a>
 							and
-							<a href="https://docs.decred.org/getting-started/user-guides/agenda-voting/#solo-voting" rel="noopener noreferrer">Solo-Voting</a>.
+							<a href="https://docs.eacred.org/getting-started/user-guides/agenda-voting/#solo-voting" rel="noopener noreferrer">Solo-Voting</a>.
 							The preferences you set on this voting service's <a href="/voting">voting page</a>
 							only affect the stake voting service's voting wallets and not your own.</p>
 						</div>
@@ -168,7 +168,7 @@
 		<section class="block">
 			<div class="col-12 block__title">
 				<h1 class="d-flex justify-content-between align-items-center">
-					<span>Decrediton Wallet</span>
+					<span>Eacrediton Wallet</span>
 					<img class="icon--info" src="/assets/images/info-icon.svg" data-toggle="modal" data-target="#connectApiKey" alt="">
 				</h1>
 			</div>
@@ -191,7 +191,7 @@
 							</div>
 						</div>
 						<div class="modal-body mx-3 px-sm-5 px-0">
-							<p>The official Decred wallet Decrediton is the recommended way to use VSPs. All you need to get started is to copy and paste the API Token below when prompted. More comprehensive guides are available for Decrediton as well a general overview of the staking process.</p>
+							<p>The official Eacred wallet Eacrediton is the recommended way to use VSPs. All you need to get started is to copy and paste the API Token below when prompted. More comprehensive guides are available for Eacrediton as well a general overview of the staking process.</p>
 
 							<strong>Submit your API key</strong>
 
@@ -202,7 +202,7 @@
 			</div>
 
 			<div class="col-12 block__description">
-				<p>To connect the VSP to your wallet, copy and paste this API key to Decrediton.</p>
+				<p>To connect the VSP to your wallet, copy and paste this API key to Eacrediton.</p>
 			</div>
 
 			<div class="col-12 mb-5 block__key">
@@ -253,9 +253,9 @@
 
 							<p>The following is an example:</p>
 
-<div class="modal-code"><pre>$ dcrctl {{ if eq .Network "testnet"}}--testnet{{end}} --wallet getnewaddress
+<div class="modal-code"><pre>$ eacrctl {{ if eq .Network "testnet"}}--testnet{{end}} --wallet getnewaddress
 {{ if eq .Network "mainnet"}}D{{end}}{{ if eq .Network "testnet"}}T{{end}}sExampleAddr1For2Demo3PurposesOnly
-$ dcrctl {{ if eq .Network "testnet"}}--testnet{{end}} --wallet validateaddress {{ if eq .Network "mainnet"}}D{{end}}{{ if eq .Network "testnet"}}T{{end}}sExampleAddr1For2Demo3PurposesOnly
+$ eacrctl {{ if eq .Network "testnet"}}--testnet{{end}} --wallet validateaddress {{ if eq .Network "mainnet"}}D{{end}}{{ if eq .Network "testnet"}}T{{end}}sExampleAddr1For2Demo3PurposesOnly
 {
   "isvalid": true,
   "address": "{{ if eq .Network "mainnet"}}D{{end}}{{ if eq .Network "testnet"}}T{{end}}sExampleAddr1For2Demo3PurposesOnly",

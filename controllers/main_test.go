@@ -6,7 +6,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/decred/dcrd/chaincfg/v2"
+	"github.com/Eacred/eacrd/chaincfg"
 )
 
 func TestGetNetworkName(t *testing.T) {

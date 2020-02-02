@@ -1,4 +1,4 @@
-// Copyright (c) 2017 The Decred developers
+// Copyright (c) 2017 The Eacred developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 package main
@@ -10,12 +10,12 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/decred/dcrd/chaincfg/chainhash"
-	"github.com/decred/dcrd/chaincfg/v2"
-	"github.com/decred/dcrd/hdkeychain/v2"
-	"github.com/decred/dcrstakepool/backend/stakepoold/stakepool"
-	"github.com/decred/dcrstakepool/backend/stakepoold/userdata"
-	"github.com/decred/dcrstakepool/helpers"
+	"github.com/Eacred/eacrd/chaincfg/chainhash"
+	"github.com/Eacred/eacrd/chaincfg"
+	"github.com/Eacred/eacrd/hdkeychain"
+	"github.com/Eacred/eacrstakepool/backend/stakepoold/stakepool"
+	"github.com/Eacred/eacrstakepool/backend/stakepoold/userdata"
+	"github.com/Eacred/eacrstakepool/helpers"
 )
 
 func TestCalculateFeeAddresses(t *testing.T) {

@@ -1,4 +1,4 @@
-// Copyright (c) 2017 The Decred developers
+// Copyright (c) 2017 The Eacred developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -17,15 +17,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/decred/dcrd/chaincfg/v2"
-	"github.com/decred/dcrd/dcrutil/v2"
-	"github.com/decred/dcrd/hdkeychain/v2"
-	"github.com/decred/dcrd/rpcclient/v4"
-	"github.com/decred/dcrstakepool/backend/stakepoold/stakepool"
-	"github.com/decred/dcrstakepool/backend/stakepoold/userdata"
-	"github.com/decred/dcrstakepool/helpers"
-	"github.com/decred/dcrstakepool/signal"
-	"github.com/decred/dcrwallet/wallet/v3/txrules"
+	"github.com/Eacred/eacrd/chaincfg"
+	"github.com/Eacred/eacrd/dcrutil"
+	"github.com/Eacred/eacrd/hdkeychain"
+	"github.com/Eacred/eacrd/rpcclient"
+	"github.com/Eacred/eacrstakepool/backend/stakepoold/stakepool"
+	"github.com/Eacred/eacrstakepool/backend/stakepoold/userdata"
+	"github.com/Eacred/eacrstakepool/helpers"
+	"github.com/Eacred/eacrstakepool/signal"
+	"github.com/Eacred/eacrwallet/wallet/txrules"
 
 	// register database driver
 	_ "github.com/go-sql-driver/mysql"
@@ -160,10 +160,10 @@ func runMain(ctx context.Context) error {
 	var walletVer semver
 	walletConn, walletVer, err := connectWalletRPC(ctx, wg, cfg)
 	if err != nil || walletConn == nil {
-		log.Infof("Connection to dcrwallet failed: %v", err)
+		log.Infof("Connection to eacrwallet failed: %v", err)
 		return err
 	}
-	log.Infof("Connected to dcrwallet (JSON-RPC API v%s)",
+	log.Infof("Connected to eacrwallet (JSON-RPC API v%s)",
 		walletVer.String())
 	walletInfoRes, err := walletConn.RPCClient().WalletInfo()
 	if err != nil || walletInfoRes == nil {
@@ -173,7 +173,7 @@ func runMain(ctx context.Context) error {
 
 	// stakepoold must handle voting.
 	if walletInfoRes.Voting {
-		err := errors.New("dcrwallet config: voting is enabled")
+		err := errors.New("eacrwallet config: voting is enabled")
 		log.Error(err)
 		return err
 	}
@@ -229,7 +229,7 @@ func runMain(ctx context.Context) error {
 	// Daemon client connection
 	nodeConn, nodeVer, err := connectNodeRPC(spd, cfg)
 	if err != nil || nodeConn == nil {
-		log.Infof("Connection to dcrd failed: %v", err)
+		log.Infof("Connection to ecrd failed: %v", err)
 		return err
 	}
 	spd.NodeConnection = nodeConn
@@ -237,10 +237,10 @@ func runMain(ctx context.Context) error {
 	// Display connected network
 	curnet, err := nodeConn.GetCurrentNet()
 	if err != nil {
-		log.Errorf("Unable to get current network from dcrd: %v", err)
+		log.Errorf("Unable to get current network from ecrd: %v", err)
 		return err
 	}
-	log.Infof("Connected to dcrd (JSON-RPC API v%s) on %v",
+	log.Infof("Connected to ecrd (JSON-RPC API v%s) on %v",
 		nodeVer.String(), curnet.String())
 
 	// prune save data
@@ -286,7 +286,7 @@ func runMain(ctx context.Context) error {
 	for {
 		curHash, curHeight, err := nodeConn.GetBestBlock()
 		if err != nil {
-			log.Errorf("unable to get bestblock from dcrd: %v", err)
+			log.Errorf("unable to get bestblock from ecrd: %v", err)
 			return err
 		}
 		log.Infof("current block height %v hash %v", curHeight, curHash)
@@ -299,7 +299,7 @@ func runMain(ctx context.Context) error {
 
 		afterHash, afterHeight, err := nodeConn.GetBestBlock()
 		if err != nil {
-			log.Errorf("unable to get bestblock from dcrd: %v", err)
+			log.Errorf("unable to get bestblock from ecrd: %v", err)
 			return err
 		}
 
@@ -332,7 +332,7 @@ func runMain(ctx context.Context) error {
 			"spent/missed tickets notifications: %s\n", err.Error())
 		return err
 	}
-	log.Info("subscribed to notifications from dcrd")
+	log.Info("subscribed to notifications from ecrd")
 
 	if !cfg.NoRPCListen {
 		if _, err = startGRPCServers(spd); err != nil {

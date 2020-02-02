@@ -17,7 +17,7 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/decred/dcrstakepool/models"
+	"github.com/Eacred/eacrstakepool/models"
 	"github.com/go-gorp/gorp"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"

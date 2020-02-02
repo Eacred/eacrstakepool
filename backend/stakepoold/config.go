@@ -1,5 +1,5 @@
 // Copyright (c) 2013-2014 The btcsuite developers
-// Copyright (c) 2015-2019 The Decred developers
+// Copyright (c) 2015-2019 The Eacred developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -14,8 +14,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/decred/dcrd/dcrutil/v2"
-	"github.com/decred/dcrstakepool/internal/version"
+	"github.com/Eacred/eacrd/dcrutil"
+	"github.com/Eacred/eacrstakepool/internal/version"
 	flags "github.com/jessevdk/go-flags"
 )
 
@@ -45,7 +45,7 @@ var (
 // to parse and execute service commands specified via the -s flag.
 var runServiceCommand func(string) error
 
-// config defines the configuration options for dcrd.
+// config defines the configuration options for ecrd.
 //
 // See loadConfig for details on the configuration load process.
 type config struct {
@@ -64,10 +64,10 @@ type config struct {
 	DBPassword       string   `long:"dbpassword" description:"Password for database connection"`
 	DBPort           string   `long:"dbport" description:"Port for database connection"`
 	DBName           string   `long:"dbname" description:"Name of database"`
-	DcrdHost         string   `long:"dcrdhost" description:"Hostname/IP for dcrd server"`
-	DcrdUser         string   `long:"dcrduser" description:"Username for dcrd server"`
-	DcrdPassword     string   `long:"dcrdpassword" description:"Password for dcrd server"`
-	DcrdCert         string   `long:"dcrdcert" description:"Certificate path for dcrd server"`
+	EcrdHost         string   `long:"ecrdhost" description:"Hostname/IP for ecrd server"`
+	EcrdUser         string   `long:"ecrduser" description:"Username for ecrd server"`
+	EcrdPassword     string   `long:"ecrdpassword" description:"Password for ecrd server"`
+	EcrdCert         string   `long:"ecrdcert" description:"Certificate path for ecrd server"`
 	WalletHost       string   `long:"wallethost" description:"Hostname for wallet server"`
 	WalletUser       string   `long:"walletuser" description:"Username for wallet server"`
 	WalletPassword   string   `long:"walletpassword" description:"Password for wallet server"`
@@ -470,29 +470,29 @@ func loadConfig() (*config, []string, error) {
 		return nil, nil, err
 	}
 
-	if len(cfg.DcrdHost) == 0 {
-		str := "%s: dcrdhost is not set in config"
+	if len(cfg.EcrdHost) == 0 {
+		str := "%s: ecrdhost is not set in config"
 		err := fmt.Errorf(str, funcName)
 		fmt.Fprintln(os.Stderr, err)
 		return nil, nil, err
 	}
 
-	if len(cfg.DcrdCert) == 0 {
-		str := "%s: dcrdcert is not set in config"
+	if len(cfg.EcrdCert) == 0 {
+		str := "%s: ecrdcert is not set in config"
 		err := fmt.Errorf(str, funcName)
 		fmt.Fprintln(os.Stderr, err)
 		return nil, nil, err
 	}
 
-	if len(cfg.DcrdUser) == 0 {
-		str := "%s: dcrduser is not set in config"
+	if len(cfg.EcrdUser) == 0 {
+		str := "%s: ecrduser is not set in config"
 		err := fmt.Errorf(str, funcName)
 		fmt.Fprintln(os.Stderr, err)
 		return nil, nil, err
 	}
 
-	if len(cfg.DcrdPassword) == 0 {
-		str := "%s: dcrdpassword is not set in config"
+	if len(cfg.EcrdPassword) == 0 {
+		str := "%s: ecrdpassword is not set in config"
 		err := fmt.Errorf(str, funcName)
 		fmt.Fprintln(os.Stderr, err)
 		return nil, nil, err
@@ -527,20 +527,20 @@ func loadConfig() (*config, []string, error) {
 	}
 
 	// Add default wallet port for the active network if there's no port specified
-	cfg.DcrdHost = normalizeAddress(cfg.DcrdHost, activeNetParams.DcrdRPCServerPort)
+	cfg.EcrdHost = normalizeAddress(cfg.EcrdHost, activeNetParams.EcrdRPCServerPort)
 	cfg.WalletHost = normalizeAddress(cfg.WalletHost, activeNetParams.WalletRPCServerPort)
 
-	if !fileExists(cfg.DcrdCert) {
-		path := filepath.Join(cfg.HomeDir, cfg.DcrdCert)
+	if !fileExists(cfg.EcrdCert) {
+		path := filepath.Join(cfg.HomeDir, cfg.EcrdCert)
 		if !fileExists(path) {
-			str := "%s: dcrdcert " + cfg.DcrdCert + " and " +
+			str := "%s: ecrdcert " + cfg.EcrdCert + " and " +
 				path + " don't exist"
 			err := fmt.Errorf(str, funcName)
 			fmt.Fprintln(os.Stderr, err)
 			return nil, nil, err
 		}
 
-		cfg.DcrdCert = path
+		cfg.EcrdCert = path
 	}
 
 	if !fileExists(cfg.WalletCert) {

@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 
-	"github.com/decred/dcrd/chaincfg/chainhash"
-	"github.com/decred/dcrd/rpcclient/v4"
-	"github.com/decred/dcrstakepool/backend/stakepoold/stakepool"
+	"github.com/Eacred/eacrd/chaincfg/chainhash"
+	"github.com/Eacred/eacrd/rpcclient"
+	"github.com/Eacred/eacrstakepool/backend/stakepoold/stakepool"
 )
 
 // Define notification handlers

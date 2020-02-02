@@ -1,19 +1,19 @@
-// Copyright (c) 2019 The Decred developers
+// Copyright (c) 2019 The Eacred developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
 package helpers
 
 import (
-	"github.com/decred/dcrd/chaincfg/v2"
-	"github.com/decred/dcrd/dcrec"
-	"github.com/decred/dcrd/dcrutil/v2"
-	"github.com/decred/dcrd/hdkeychain/v2"
+	"github.com/Eacred/eacrd/chaincfg"
+	"github.com/Eacred/eacrd/dcrec"
+	"github.com/Eacred/eacrd/dcrutil"
+	"github.com/Eacred/eacrd/hdkeychain"
 )
 
 const (
 	// ExternalBranch is a helper value that needs to
-	// match dcrwallet's udb.ExternalBranch
+	// match eacrwallet's udb.ExternalBranch
 	ExternalBranch uint32 = 0
 )
 

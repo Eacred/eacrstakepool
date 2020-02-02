@@ -1,4 +1,4 @@
-// Copyright (c) 2019 The Decred developers
+// Copyright (c) 2019 The Eacred developers
 
 // Package stakepool holds the Stakepool struct and processes incomming commands
 // and notifications.
@@ -14,16 +14,16 @@ import (
 	"sync"
 	"time"
 
-	"github.com/decred/dcrd/blockchain/stake/v2"
-	"github.com/decred/dcrd/chaincfg/chainhash"
-	"github.com/decred/dcrd/chaincfg/v2"
-	"github.com/decred/dcrd/dcrutil/v2"
-	wallettypes "github.com/decred/dcrwallet/rpc/jsonrpc/types"
+	"github.com/Eacred/eacrd/blockchain/stake"
+	"github.com/Eacred/eacrd/chaincfg/chainhash"
+	"github.com/Eacred/eacrd/chaincfg"
+	"github.com/Eacred/eacrd/dcrutil"
+	wallettypes "github.com/Eacred/eacrwallet/rpc/jsonrpc/types"
 
-	"github.com/decred/dcrd/rpcclient/v4"
-	"github.com/decred/dcrd/wire"
-	"github.com/decred/dcrstakepool/backend/stakepoold/userdata"
-	"github.com/decred/dcrwallet/wallet/v3/txrules"
+	"github.com/Eacred/eacrd/rpcclient"
+	"github.com/Eacred/eacrd/wire"
+	"github.com/Eacred/eacrstakepool/backend/stakepoold/userdata"
+	"github.com/Eacred/eacrwallet/wallet/txrules"
 )
 
 var (
@@ -189,7 +189,7 @@ func MsgTxFromHex(txhex string) (*wire.MsgTx, error) {
 	return msgTx, nil
 }
 
-// getticket pulls the transaction information for a ticket from dcrwallet. This is a go routine!
+// getticket pulls the transaction information for a ticket from eacrwallet. This is a go routine!
 func (spd *Stakepoold) getticket(wg *sync.WaitGroup, nt *ticketMetadata) {
 	start := time.Now()
 
@@ -277,7 +277,7 @@ func (spd *Stakepoold) UpdateTicketDataFromMySQL() error {
 	return nil
 }
 
-// ImportNewScript will import a redeem script into dcrwallet. No rescan is
+// ImportNewScript will import a redeem script into eacrwallet. No rescan is
 // performed because we are importing a brand new script, it shouldn't have any
 // associated history. Current block height is returned to indicate which height
 // the new user has registered.
@@ -359,7 +359,7 @@ func (spd *Stakepoold) ListScripts() ([][]byte, error) {
 }
 
 // CreateMultisig decodes the provided array of addresses, and then
-// passes them to dcrwallet to create a 1-of-N multisig address.
+// passes them to eacrwallet to create a 1-of-N multisig address.
 func (spd *Stakepoold) CreateMultisig(addresses []string) (*wallettypes.CreateMultiSigResult, error) {
 	decodedAddresses := make([]dcrutil.Address, len(addresses))
 
@@ -732,7 +732,7 @@ func (spd *Stakepoold) ProcessWinningTickets(wt WinningTicketsForBlock) {
 		} else if voteCfg.VoteBitsVersion != spd.VotingConfig.VoteVersion {
 			// If the user's voting config has a vote version that
 			// is different from our global vote version that we
-			// plucked from dcrwallet walletinfo then just use the
+			// plucked from eacrwallet walletinfo then just use the
 			// default votebits.
 			voteCfg.VoteBits = spd.VotingConfig.VoteBits
 			log.Infof("ProcessWinningTickets: userid %v multisigaddress %v vote "+

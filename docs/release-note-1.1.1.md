@@ -12,7 +12,7 @@
 - **KNOWN ISSUE** Total tickets count reported by stakepoold may not be totally
   accurate until low fee tickets that have been added to the database can be
   marked as voted.  This will be resolved by future work.
-  ([#201](https://github.com/decred/dcrstakepool/issues/201)).
+  ([#201](https://github.com/Eacred/eacrstakepool/issues/201)).
 
 ## Git Tip Upgrade Guide
 
@@ -29,19 +29,19 @@
 
 ## 1.1.1 Release Notes
 
-- dcrd has a new agenda and the vote version in dcrwallet has been
+- ecrd has a new agenda and the vote version in eacrwallet has been
   incremented to v5 on mainnet.
 - stakepoold
   - The ticket list is now maintained by doing an initial GetTicket RPC call and
     then subtracts/adds tickets by processing SpentAndMissed/New ticket
-    notifications from dcrwallet.  This approach is much faster than the old
+    notifications from eacrwallet.  This approach is much faster than the old
     method of calling StakePoolUserInfo for each user.
-  - Bug fixes to the above commit and to accommodate changes in dcrwallet.
+  - Bug fixes to the above commit and to accommodate changes in eacrwallet.
 - Status page
   - StatusUnauthorized error is now thrown rather than a generic one when
     accessing the page as a non-admin.
   - Updated to use new design.
-  - Synced dcrwallet walletinfo field list.
+  - Synced eacrwallet walletinfo field list.
 - Tickets page
   - Performance was greatly improved by skipping display of historic tickets.
   - Handles users that have only low fee/invalid tickets properly.
@@ -49,22 +49,22 @@
 - General markup improvements.
   - Removed mention of creating a voting account as it has been deprecated.
   - Instructions were further clarified and updated to strongly recommend the
-    use of Decrediton/Paymetheus.
+    use of Eacrediton/Paymetheus.
   - Fragments of invalid markup were fixed.
 
 ## 1.1.1 Upgrade Guide
 
 1) Announce maintenance and shut down dcrstakepool.
-2) Perform upgrades on each dcrd+dcrwallet+stakepoold voting cluster one at a
+2) Perform upgrades on each ecrd+eacrwallet+stakepoold voting cluster one at a
    time.
-   - Stop stakepoold, dcrwallet, and dcrd.
-   - Upgrade dcrd, dcrwallet to 1.1.0 release binaries or git. If compiling from
+   - Stop stakepoold, eacrwallet, and ecrd.
+   - Upgrade ecrd, eacrwallet to 1.1.0 release binaries or git. If compiling from
    source, Go 1.9 is recommended to pick up improvements to the Golang runtime.
-   - Restart dcrd, dcrwallet.
+   - Restart ecrd, eacrwallet.
    - Upgrade stakepoold.
    - Start stakepoold.
 3) Upgrade and start dcrstakepool.  If you are maintaining a fork, note that
-   you need to update the dcrd/chaincfg dependency to a revision that contains
+   you need to update the ecrd/chaincfg dependency to a revision that contains
    the new agenda.
 4) dcrstakepool will reset the votebits for all users to 1 when it detects the
    new vote version via stakepoold.

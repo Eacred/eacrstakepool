@@ -11,11 +11,11 @@ import (
 	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/credentials"
 
-	"github.com/decred/dcrd/chaincfg/chainhash"
-	"github.com/decred/dcrd/dcrutil/v2"
-	pb "github.com/decred/dcrstakepool/backend/stakepoold/rpc/stakepoolrpc"
-	"github.com/decred/dcrstakepool/helpers"
-	"github.com/decred/dcrstakepool/models"
+	"github.com/Eacred/eacrd/chaincfg/chainhash"
+	"github.com/Eacred/eacrd/dcrutil"
+	pb "github.com/Eacred/eacrstakepool/backend/stakepoold/rpc/stakepoolrpc"
+	"github.com/Eacred/eacrstakepool/helpers"
+	"github.com/Eacred/eacrstakepool/models"
 	"golang.org/x/net/context"
 )
 
@@ -94,8 +94,8 @@ func ConnectStakepooldGRPC(stakepooldHosts []string, stakepooldCerts []string) (
 }
 
 // connected uses WalletInfo RPC to check that all stakepoold and
-// dcrwallet instances are currently online and reachable. Also
-// checks that dcrwallet is unlocked and connected to dcrd. This
+// eacrwallet instances are currently online and reachable. Also
+// checks that eacrwallet is unlocked and connected to ecrd. This
 // should be performed before any write operations.
 func (s *StakepooldManager) connected() error {
 	responses, err := s.WalletInfo()
@@ -105,7 +105,7 @@ func (s *StakepooldManager) connected() error {
 
 	for i, resp := range responses {
 		if !resp.DaemonConnected {
-			return fmt.Errorf("wallet[%d] is not connected to dcrd", i)
+			return fmt.Errorf("wallet[%d] is not connected to ecrd", i)
 		}
 		if !resp.Unlocked {
 			return fmt.Errorf("wallet[%d] is not unlocked", i)

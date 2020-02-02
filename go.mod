@@ -1,24 +1,14 @@
-module github.com/decred/dcrstakepool
+module github.com/Eacred/eacrstakepool
 
 go 1.12
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.4.0
+	github.com/Eacred/eacrd v0.0.0-20200130225131-86d11748c652
+	github.com/Eacred/eacrwallet v0.0.0-20200130085721-a8bc15909293
+	github.com/Eacred/slog v1.0.1
 	github.com/dajohi/goemail v1.0.1
 	github.com/dchest/captcha v0.0.0-20170622155422-6a29415a8364
-	github.com/decred/dcrd/blockchain/stake/v2 v2.0.2
-	github.com/decred/dcrd/certgen v1.1.0
-	github.com/decred/dcrd/chaincfg/chainhash v1.0.2
-	github.com/decred/dcrd/chaincfg/v2 v2.3.0
-	github.com/decred/dcrd/dcrec v1.0.0
-	github.com/decred/dcrd/dcrutil/v2 v2.0.1
-	github.com/decred/dcrd/hdkeychain/v2 v2.1.0
-	github.com/decred/dcrd/rpcclient/v4 v4.0.0
-	github.com/decred/dcrd/wire v1.3.0
-	github.com/decred/dcrdata/api/types/v4 v4.0.4
-	github.com/decred/dcrwallet/rpc/jsonrpc/types v1.4.0
-	github.com/decred/dcrwallet/wallet/v3 v3.2.1
-	github.com/decred/slog v1.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-gorp/gorp v2.2.0+incompatible
 	github.com/go-sql-driver/mysql v1.5.0

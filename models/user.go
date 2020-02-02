@@ -1,4 +1,4 @@
-// Copyright (c) 2016-2019 The Decred developers
+// Copyright (c) 2016-2019 The Eacred developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/decred/dcrd/chaincfg/chainhash"
+	"github.com/Eacred/eacrd/chaincfg/chainhash"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/go-gorp/gorp"
 	// register database driver
@@ -36,7 +36,7 @@ func DecodeHashList(hashList HashList) ([]chainhash.Hash, error) {
 	return hashes, nil
 }
 
-// ValidateHashList ensures that all strings in the HashList are valid Decred
+// ValidateHashList ensures that all strings in the HashList are valid Eacred
 // hashes. If all are valid, the returned error will be nil.
 func ValidateHashList(hashList HashList) error {
 	_, err := DecodeHashList(hashList)
@@ -340,7 +340,7 @@ func GetDbMap(APISecret, baseURL, user, password, hostname, port, database strin
 	// without manual intervention.
 
 	// stakepool v0.0.1 -> v0.0.2
-	// add HeightRegistered so dcrwallet doesn't scan from the genesis block
+	// add HeightRegistered so eacrwallet doesn't scan from the genesis block
 	// for transactions that won't exist.
 	// The stake pool code was released to stake pool operators on Friday,
 	// April 1st 2016.  The last mainnet block on Mar 31st of 15346 is used

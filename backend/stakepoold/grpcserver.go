@@ -1,5 +1,5 @@
 // Copyright (c) 2013-2015 The btcsuite developers
-// Copyright (c) 2015-2017 The Decred developers
+// Copyright (c) 2015-2017 The Eacred developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -20,9 +20,9 @@ import (
 
 	xcontext "golang.org/x/net/context"
 
-	"github.com/decred/dcrd/certgen"
-	"github.com/decred/dcrstakepool/backend/stakepoold/rpc/server"
-	"github.com/decred/dcrstakepool/backend/stakepoold/stakepool"
+	"github.com/Eacred/eacrd/certgen"
+	"github.com/Eacred/eacrstakepool/backend/stakepoold/rpc/server"
+	"github.com/Eacred/eacrstakepool/backend/stakepoold/stakepool"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

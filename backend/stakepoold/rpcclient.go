@@ -7,10 +7,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/decred/dcrd/chaincfg/chainhash"
-	"github.com/decred/dcrd/rpcclient/v4"
-	"github.com/decred/dcrstakepool/backend/stakepoold/stakepool"
-	"github.com/decred/dcrstakepool/backend/stakepoold/userdata"
+	"github.com/Eacred/eacrd/chaincfg/chainhash"
+	"github.com/Eacred/eacrd/rpcclient"
+	"github.com/Eacred/eacrstakepool/backend/stakepoold/stakepool"
+	"github.com/Eacred/eacrstakepool/backend/stakepoold/userdata"
 )
 
 var requiredChainServerAPI = semver{major: 6, minor: 1, patch: 1}
@@ -19,41 +19,41 @@ var requiredWalletAPI = semver{major: 6, minor: 2, patch: 0}
 func connectNodeRPC(spd *stakepool.Stakepoold, cfg *config) (*rpcclient.Client, semver, error) {
 	var nodeVer semver
 
-	dcrdCert, err := ioutil.ReadFile(cfg.DcrdCert)
+	ecrdCert, err := ioutil.ReadFile(cfg.EcrdCert)
 	if err != nil {
-		log.Errorf("Failed to read dcrd cert file at %s: %s\n",
-			cfg.DcrdCert, err.Error())
+		log.Errorf("Failed to read ecrd cert file at %s: %s\n",
+			cfg.EcrdCert, err.Error())
 		return nil, nodeVer, err
 	}
 
-	log.Debugf("Attempting to connect to dcrd RPC %s as user %s "+
+	log.Debugf("Attempting to connect to ecrd RPC %s as user %s "+
 		"using certificate located in %s",
-		cfg.DcrdHost, cfg.DcrdUser, cfg.DcrdCert)
+		cfg.EcrdHost, cfg.EcrdUser, cfg.EcrdCert)
 
 	connCfgDaemon := &rpcclient.ConnConfig{
-		Host:         cfg.DcrdHost,
+		Host:         cfg.EcrdHost,
 		Endpoint:     "ws", // websocket
-		User:         cfg.DcrdUser,
-		Pass:         cfg.DcrdPassword,
-		Certificates: dcrdCert,
+		User:         cfg.EcrdUser,
+		Pass:         cfg.EcrdPassword,
+		Certificates: ecrdCert,
 	}
 
 	ntfnHandlers := getNodeNtfnHandlers(spd)
-	dcrdClient, err := rpcclient.New(connCfgDaemon, ntfnHandlers)
+	ecrdClient, err := rpcclient.New(connCfgDaemon, ntfnHandlers)
 	if err != nil {
-		log.Errorf("Failed to start dcrd RPC client: %s\n", err.Error())
+		log.Errorf("Failed to start ecrd RPC client: %s\n", err.Error())
 		return nil, nodeVer, err
 	}
 
 	// Ensure the RPC server has a compatible API version.
-	ver, err := dcrdClient.Version()
+	ver, err := ecrdClient.Version()
 	if err != nil {
 		log.Error("Unable to get RPC version: ", err)
 		return nil, nodeVer, fmt.Errorf("Unable to get node RPC version")
 	}
 
-	dcrdVer := ver["dcrdjsonrpcapi"]
-	nodeVer = semver{dcrdVer.Major, dcrdVer.Minor, dcrdVer.Patch}
+	ecrdVer := ver["ecrdjsonrpcapi"]
+	nodeVer = semver{ecrdVer.Major, ecrdVer.Minor, ecrdVer.Patch}
 
 	if !semverCompatible(requiredChainServerAPI, nodeVer) {
 		return nil, nodeVer, fmt.Errorf("Node JSON-RPC server does not have "+
@@ -61,7 +61,7 @@ func connectNodeRPC(spd *stakepool.Stakepoold, cfg *config) (*rpcclient.Client, 
 			nodeVer, requiredChainServerAPI)
 	}
 
-	return dcrdClient, nodeVer, nil
+	return ecrdClient, nodeVer, nil
 }
 
 func connectWalletRPC(ctx context.Context, wg *sync.WaitGroup, cfg *config) (*stakepool.Client, semver, error) {
@@ -69,12 +69,12 @@ func connectWalletRPC(ctx context.Context, wg *sync.WaitGroup, cfg *config) (*st
 
 	dcrwCert, err := ioutil.ReadFile(cfg.WalletCert)
 	if err != nil {
-		log.Errorf("Failed to read dcrwallet cert file at %s: %s\n",
+		log.Errorf("Failed to read eacrwallet cert file at %s: %s\n",
 			cfg.WalletCert, err.Error())
 		return nil, walletVer, err
 	}
 
-	log.Infof("Attempting to connect to dcrwallet RPC %s as user %s "+
+	log.Infof("Attempting to connect to eacrwallet RPC %s as user %s "+
 		"using certificate located in %s",
 		cfg.WalletHost, cfg.WalletUser, cfg.WalletCert)
 
@@ -104,14 +104,14 @@ func connectWalletRPC(ctx context.Context, wg *sync.WaitGroup, cfg *config) (*st
 		return nil, walletVer, fmt.Errorf("Unable to get node RPC version")
 	}
 
-	dcrwVer := ver["dcrwalletjsonrpcapi"]
+	dcrwVer := ver["eacrwalletjsonrpcapi"]
 	walletVer = semver{dcrwVer.Major, dcrwVer.Minor, dcrwVer.Patch}
 
 	if !semverCompatible(requiredWalletAPI, walletVer) {
 		log.Errorf("Node JSON-RPC server %v does not have "+
 			"a compatible API version. Advertizes %v but require %v",
 			cfg.WalletHost, walletVer, requiredWalletAPI)
-		return nil, walletVer, fmt.Errorf("Incompatible dcrwallet RPC version")
+		return nil, walletVer, fmt.Errorf("Incompatible eacrwallet RPC version")
 	}
 
 	return dcrwClient, walletVer, nil

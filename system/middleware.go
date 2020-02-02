@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/decred/dcrstakepool/models"
+	"github.com/Eacred/eacrstakepool/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-gorp/gorp"
 	"github.com/gorilla/sessions"

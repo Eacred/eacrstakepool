@@ -1,5 +1,5 @@
 // Copyright (c) 2013-2014 The btcsuite developers
-// Copyright (c) 2015-2019 The Decred developers
+// Copyright (c) 2015-2019 The Eacred developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -17,10 +17,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/decred/dcrd/chaincfg/v2"
-	"github.com/decred/dcrd/dcrutil/v2"
-	"github.com/decred/dcrd/hdkeychain/v2"
-	"github.com/decred/dcrstakepool/internal/version"
+	"github.com/Eacred/eacrd/chaincfg"
+	"github.com/Eacred/eacrd/dcrutil"
+	"github.com/Eacred/eacrd/hdkeychain"
+	"github.com/Eacred/eacrstakepool/internal/version"
 	flags "github.com/jessevdk/go-flags"
 )
 
@@ -39,7 +39,7 @@ const (
 	defaultListen          = ":8000"
 	defaultPoolEmail       = "admin@example.com"
 	defaultPoolFees        = 7.5
-	defaultPoolLink        = "https://forum.decred.org/threads/rfp-6-setup-and-operate-10-stake-pools.1361/"
+	defaultPoolLink        = "https://forum.eacred.org/threads/rfp-6-setup-and-operate-10-stake-pools.1361/"
 	defaultPublicPath      = "public"
 	defaultTemplatePath    = "views"
 	defaultSMTPHost        = ""
@@ -60,7 +60,7 @@ var (
 // to parse and execute service commands specified via the -s flag.
 var runServiceCommand func(string) error
 
-// config defines the configuration options for dcrd.
+// config defines the configuration options for ecrd.
 //
 // See loadConfig for details on the configuration load process.
 type config struct {

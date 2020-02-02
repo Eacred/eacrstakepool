@@ -10,15 +10,15 @@
 # This harness makes a few assumptions
 #
 # - tmux is installed
-# - dcrd, dcrwallet, stakepoold and dcrstakepool are available on $PATH
-# - Decred testnet chain is already downloaded and sync'd
+# - ecrd, eacrwallet, stakepoold and dcrstakepool are available on $PATH
+# - Eacred testnet chain is already downloaded and sync'd
 # - MySQL is configured at 127.0.0.1:3306
 # - Database `stakepool` and user `stakepool` with password `password` exist
 # - The following files exist:
-#   - ${HOME}/.dcrd/rpc.cert
-#   - ${HOME}/.dcrd/rpc.key
-#   - ${HOME}/.dcrwallet/rpc.cert
-#   - ${HOME}/.dcrwallet/rpc.key
+#   - ${HOME}/.ecrd/rpc.cert
+#   - ${HOME}/.ecrd/rpc.key
+#   - ${HOME}/.eacrwallet/rpc.cert
+#   - ${HOME}/.eacrwallet/rpc.key
 #   - ${HOME}/.stakepoold/rpc.cert
 
 set -e
@@ -29,13 +29,13 @@ RPC_USER="user"
 RPC_PASS="pass"
 NUMBER_OF_BACKENDS=2
 
-DCRD_RPC_CERT="${HOME}/.dcrd/rpc.cert"
-DCRD_RPC_KEY="${HOME}/.dcrd/rpc.key"
-DCRD_RPC_LISTEN="127.0.0.1:12321"
+ECRD_RPC_CERT="${HOME}/.ecrd/rpc.cert"
+ECRD_RPC_KEY="${HOME}/.ecrd/rpc.key"
+ECRD_RPC_LISTEN="127.0.0.1:12321"
 
 WALLET_PASS="12345"
-WALLET_RPC_CERT="${HOME}/.dcrwallet/rpc.cert"
-WALLET_RPC_KEY="${HOME}/.dcrwallet/rpc.key"
+WALLET_RPC_CERT="${HOME}/.eacrwallet/rpc.cert"
+WALLET_RPC_KEY="${HOME}/.eacrwallet/rpc.key"
 
 STAKEPOOLD_RPC_CERT="${HOME}/.stakepoold/rpc.cert"
 
@@ -61,29 +61,29 @@ fi
 tmux new-session -d -s $SESSION
 
 #################################################
-# Setup the dcrd node.
+# Setup the ecrd node.
 #################################################
 
-tmux rename-window -t $SESSION 'dcrd'
+tmux rename-window -t $SESSION 'ecrd'
 
-echo "Writing config for testnet dcrd node"
-mkdir -p "${NODES_ROOT}/dcrd"
-cp "${DCRD_RPC_CERT}" "${NODES_ROOT}/dcrd/rpc.cert"
-cp "${DCRD_RPC_KEY}"  "${NODES_ROOT}/dcrd/rpc.key"
-cat > "${NODES_ROOT}/dcrd/dcrd.conf" <<EOF
+echo "Writing config for testnet ecrd node"
+mkdir -p "${NODES_ROOT}/ecrd"
+cp "${ECRD_RPC_CERT}" "${NODES_ROOT}/ecrd/rpc.cert"
+cp "${ECRD_RPC_KEY}"  "${NODES_ROOT}/ecrd/rpc.key"
+cat > "${NODES_ROOT}/ecrd/ecrd.conf" <<EOF
 rpcuser=${RPC_USER}
 rpcpass=${RPC_PASS}
-rpccert=${NODES_ROOT}/dcrd/rpc.cert
-rpckey=${NODES_ROOT}/dcrd/rpc.key
-rpclisten=${DCRD_RPC_LISTEN}
+rpccert=${NODES_ROOT}/ecrd/rpc.cert
+rpckey=${NODES_ROOT}/ecrd/rpc.key
+rpclisten=${ECRD_RPC_LISTEN}
 testnet=true
 logdir=${NODES_ROOT}/master/log
 EOF
 
-echo "Starting dcrd node"
-tmux send-keys "dcrd -C ${NODES_ROOT}/dcrd/dcrd.conf" C-m 
+echo "Starting ecrd node"
+tmux send-keys "ecrd -C ${NODES_ROOT}/ecrd/ecrd.conf" C-m 
 
-sleep 3 # Give dcrd time to start
+sleep 3 # Give ecrd time to start
 
 #################################################
 # Setup multiple back-ends.
@@ -97,37 +97,37 @@ for ((i = 1; i <= $NUMBER_OF_BACKENDS; i++)); do
     ALL_STAKEPOOLD_RPC_CERTS="${ALL_STAKEPOOLD_RPC_CERTS:+$ALL_STAKEPOOLD_RPC_CERTS,}${STAKEPOOLD_RPC_CERT}"
 
     #################################################
-    # dcrwallet
+    # eacrwallet
     #################################################
     echo ""
-    echo "Writing config for dcrwallet-${i}"
-    mkdir -p "${NODES_ROOT}/dcrwallet-${i}"
-    cp "${WALLET_RPC_CERT}" "${NODES_ROOT}/dcrwallet-${i}/rpc.cert"
-    cp "${WALLET_RPC_KEY}"  "${NODES_ROOT}/dcrwallet-${i}/rpc.key"
-    cat > "${NODES_ROOT}/dcrwallet-${i}/dcrwallet.conf" <<EOF
+    echo "Writing config for eacrwallet-${i}"
+    mkdir -p "${NODES_ROOT}/eacrwallet-${i}"
+    cp "${WALLET_RPC_CERT}" "${NODES_ROOT}/eacrwallet-${i}/rpc.cert"
+    cp "${WALLET_RPC_KEY}"  "${NODES_ROOT}/eacrwallet-${i}/rpc.key"
+    cat > "${NODES_ROOT}/eacrwallet-${i}/eacrwallet.conf" <<EOF
 username=${RPC_USER}
 password=${RPC_PASS}
-rpccert=${NODES_ROOT}/dcrwallet-${i}/rpc.cert
-rpckey=${NODES_ROOT}/dcrwallet-${i}/rpc.key
-logdir=${NODES_ROOT}/dcrwallet-${i}/log
-appdata=${NODES_ROOT}/dcrwallet-${i}
+rpccert=${NODES_ROOT}/eacrwallet-${i}/rpc.cert
+rpckey=${NODES_ROOT}/eacrwallet-${i}/rpc.key
+logdir=${NODES_ROOT}/eacrwallet-${i}/log
+appdata=${NODES_ROOT}/eacrwallet-${i}
 testnet=true
 pass=${WALLET_PASS}
-rpcconnect=${DCRD_RPC_LISTEN}
+rpcconnect=${ECRD_RPC_LISTEN}
 grpclisten=127.0.0.1:2010${i}
 rpclisten=${WALLET_RPC_LISTEN}
 stakepoolcoldextkey=${COLD_WALLET_PUB_KEY}:10000
 EOF
 
-    echo "Starting dcrwallet-${i}"
-    tmux new-window -t $SESSION -n "dcrwallet-${i}"
-    tmux send-keys "dcrwallet -C ${NODES_ROOT}/dcrwallet-${i}/dcrwallet.conf --create" C-m
+    echo "Starting eacrwallet-${i}"
+    tmux new-window -t $SESSION -n "eacrwallet-${i}"
+    tmux send-keys "eacrwallet -C ${NODES_ROOT}/eacrwallet-${i}/eacrwallet.conf --create" C-m
     sleep 2
     tmux send-keys "${WALLET_PASS}" C-m "${WALLET_PASS}" C-m "n" C-m "y" C-m
     sleep 2
     tmux send-keys "${VOTING_WALLET_SEED}" C-m C-m
-    tmux send-keys "dcrwallet -C ${NODES_ROOT}/dcrwallet-${i}/dcrwallet.conf " C-m
-    sleep 12 # Give dcrwallet time to start
+    tmux send-keys "eacrwallet -C ${NODES_ROOT}/eacrwallet-${i}/eacrwallet.conf " C-m
+    sleep 12 # Give eacrwallet time to start
 
     #################################################
     # stakepoold
@@ -137,10 +137,10 @@ EOF
     echo "Writing config for stakepoold-${i}"
     mkdir -p "${NODES_ROOT}/stakepoold-${i}"
     cat > "${NODES_ROOT}/stakepoold-${i}/stakepoold.conf" <<EOF
-dcrdhost=${DCRD_RPC_LISTEN}
-dcrdcert=${DCRD_RPC_CERT}
-dcrduser=${RPC_USER}
-dcrdpassword=${RPC_PASS}
+ecrdhost=${ECRD_RPC_LISTEN}
+ecrdcert=${ECRD_RPC_CERT}
+ecrduser=${RPC_USER}
+ecrdpassword=${RPC_PASS}
 dbhost=${MYSQL_HOST}
 dbport=${MYSQL_PORT}
 logdir=${NODES_ROOT}/stakepoold-${i}/log

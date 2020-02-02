@@ -1,4 +1,4 @@
-// Copyright (c) 2016-2019 The Decred developers
+// Copyright (c) 2016-2019 The Eacred developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -20,18 +20,18 @@ import (
 	"time"
 
 	"github.com/dchest/captcha"
-	"github.com/decred/dcrd/chaincfg/chainhash"
-	"github.com/decred/dcrd/chaincfg/v2"
-	"github.com/decred/dcrd/dcrutil/v2"
-	"github.com/decred/dcrd/hdkeychain/v2"
-	dcrdatatypes "github.com/decred/dcrdata/api/types/v4"
-	"github.com/decred/dcrstakepool/email"
-	"github.com/decred/dcrstakepool/helpers"
-	"github.com/decred/dcrstakepool/internal/version"
-	"github.com/decred/dcrstakepool/models"
-	"github.com/decred/dcrstakepool/poolapi"
-	"github.com/decred/dcrstakepool/stakepooldclient"
-	"github.com/decred/dcrstakepool/system"
+	"github.com/Eacred/eacrd/chaincfg/chainhash"
+	"github.com/Eacred/eacrd/chaincfg"
+	"github.com/Eacred/eacrd/dcrutil"
+	"github.com/Eacred/eacrd/hdkeychain"
+	eacrdatatypes "github.com/Eacred/eacrdata/api/types"
+	"github.com/Eacred/eacrstakepool/email"
+	"github.com/Eacred/eacrstakepool/helpers"
+	"github.com/Eacred/eacrstakepool/internal/version"
+	"github.com/Eacred/eacrstakepool/models"
+	"github.com/Eacred/eacrstakepool/poolapi"
+	"github.com/Eacred/eacrstakepool/stakepooldclient"
+	"github.com/Eacred/eacrstakepool/system"
 	"github.com/go-gorp/gorp"
 	"github.com/gorilla/csrf"
 	"github.com/zenazn/goji/web"
@@ -81,7 +81,7 @@ type MainController struct {
 	Cfg            *Config
 	captchaHandler *CaptchaHandler
 	voteVersion    uint32
-	DCRDataURL     string
+	ECRDataURL     string
 }
 
 // agendasCache holds the current available agendas for agendasCacheLife. Should
@@ -165,7 +165,7 @@ func NewMainController(cfg *Config) (*MainController, error) {
 
 	mc.voteVersion = lastVersion
 
-	mc.DCRDataURL = fmt.Sprintf("https://%s.dcrdata.org", mc.getNetworkName())
+	mc.ECRDataURL = fmt.Sprintf("https://%s.ecrdata.org", mc.getNetworkName())
 
 	return mc, nil
 }
@@ -173,7 +173,7 @@ func NewMainController(cfg *Config) (*MainController, error) {
 // getNetworkName will strip any suffix from a network name starting with
 // "testnet" (e.g. "testnet3"). This is primarily intended for the tickets page,
 // which generates block explorer links using a value set by the network string,
-// which is a problem since there is no testnet3.dcrdata.org host.
+// which is a problem since there is no testnet3.ecrdata.org host.
 func (controller *MainController) getNetworkName() string {
 	if strings.HasPrefix(controller.Cfg.NetParams.Name, "testnet") {
 		return "testnet"
@@ -182,7 +182,7 @@ func (controller *MainController) getNetworkName() string {
 }
 
 // agendas returns agendas and their statuses. Fetches agenda status from
-// dcrdata.org if past agenda.Timer limit from previous fetch. Caches agenda
+// ecrdata.org if past agenda.Timer limit from previous fetch. Caches agenda
 // data for agendasCacheLife. This method is safe for concurrent use.
 func (controller *MainController) agendas() []agenda {
 	agendasCache.Lock()
@@ -192,8 +192,8 @@ func (controller *MainController) agendas() []agenda {
 		return *agendasCache.agendas
 	}
 	agendasCache.timer = now.Add(agendasCacheLife)
-	url := fmt.Sprintf("%s/api/agendas", controller.DCRDataURL)
-	agendaInfos, err := dcrDataAgendas(url)
+	url := fmt.Sprintf("%s/api/agendas", controller.ECRDataURL)
+	agendaInfos, err := ecrDataAgendas(url)
 	if err != nil {
 		// Ensure the next call tries to fetch statuses again.
 		agendasCache.timer = time.Time{}
@@ -220,9 +220,9 @@ func (controller *MainController) agendas() []agenda {
 	return *agendasCache.agendas
 }
 
-// dcrDataAgendas gets json data for current agendas from url. url is either
-// https://testnet.dcrdata.org/api/agendas or https://mainnet.dcrdata.org/api/agendas
-func dcrDataAgendas(url string) ([]*dcrdatatypes.AgendasInfo, error) {
+// ecrDataAgendas gets json data for current agendas from url. url is either
+// https://testnet.ecrdata.org/api/agendas or https://mainnet.ecrdata.org/api/agendas
+func ecrDataAgendas(url string) ([]*eacrdatatypes.AgendasInfo, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -232,7 +232,7 @@ func dcrDataAgendas(url string) ([]*dcrdatatypes.AgendasInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	a := []*dcrdatatypes.AgendasInfo{}
+	a := []*eacrdatatypes.AgendasInfo{}
 	if err = json.Unmarshal(data, &a); err != nil {
 		return nil, err
 	}
@@ -709,7 +709,7 @@ func (controller *MainController) Address(c web.C, r *http.Request) (string, int
 
 	widgets := controller.Parse(t, "address", c.Env)
 
-	c.Env["Title"] = "Decred VSP - Address"
+	c.Env["Title"] = "Eacred VSP - Address"
 	c.Env["Designation"] = controller.Cfg.Designation
 
 	c.Env["Content"] = template.HTML(widgets)
@@ -853,7 +853,7 @@ func (controller *MainController) AdminStatus(c web.C, r *http.Request) (string,
 	t := controller.GetTemplate(c)
 	c.Env["Admin"] = isAdmin
 	c.Env["IsAdminStatus"] = true
-	c.Env["Title"] = "Decred Voting Service - Status (Admin)"
+	c.Env["Title"] = "Eacred Voting Service - Status (Admin)"
 
 	// Set info to be used by admins on /status page.
 	c.Env["BackendStatus"] = backendStatus
@@ -898,7 +898,7 @@ func (controller *MainController) AdminTickets(c web.C, r *http.Request) (string
 
 	c.Env["Admin"] = isAdmin
 	c.Env["IsAdminTickets"] = true
-	c.Env["DCRDataURL"] = controller.DCRDataURL
+	c.Env["ECRDataURL"] = controller.ECRDataURL
 
 	c.Env["FlashError"] = session.Flashes("adminTicketsError")
 	c.Env["FlashSuccess"] = session.Flashes("adminTicketsSuccess")
@@ -908,7 +908,7 @@ func (controller *MainController) AdminTickets(c web.C, r *http.Request) (string
 
 	widgets := controller.Parse(t, "admin/tickets", c.Env)
 
-	c.Env["Title"] = "Decred Voting Service - Tickets (Admin)"
+	c.Env["Title"] = "Eacred Voting Service - Tickets (Admin)"
 	c.Env["Designation"] = controller.Cfg.Designation
 
 	c.Env["Content"] = template.HTML(widgets)
@@ -1048,7 +1048,7 @@ func (controller *MainController) EmailUpdate(c web.C, r *http.Request) (string,
 	dbMap := controller.GetDbMap(c)
 
 	render := func() string {
-		c.Env["Title"] = "Decred Voting Service - Email Update"
+		c.Env["Title"] = "Eacred Voting Service - Email Update"
 		c.Env["FlashError"] = session.Flashes("emailupdateError")
 		c.Env["FlashSuccess"] = session.Flashes("emailupdateSuccess")
 		c.Env["IsEmailUpdate"] = true
@@ -1127,7 +1127,7 @@ func (controller *MainController) EmailVerify(c web.C, r *http.Request) (string,
 	dbMap := controller.GetDbMap(c)
 
 	render := func() string {
-		c.Env["Title"] = "Decred Voting Service - Email Verification"
+		c.Env["Title"] = "Eacred Voting Service - Email Verification"
 		c.Env["FlashError"] = session.Flashes("emailverifyError")
 		c.Env["FlashSuccess"] = session.Flashes("emailverifySuccess")
 		c.Env["IsEmailVerify"] = true
@@ -1182,7 +1182,7 @@ func (controller *MainController) Error(c web.C, r *http.Request) (string, int) 
 
 	c.Env["Admin"], _ = controller.isAdmin(c, r)
 	c.Env["IsError"] = true
-	c.Env["Title"] = "Decred VSP - Error"
+	c.Env["Title"] = "Eacred VSP - Error"
 	c.Env["RateLimited"] = r.URL.Query().Get("rl")
 
 	widgets := controller.Parse(t, "error", c.Env)
@@ -1224,7 +1224,7 @@ func (controller *MainController) Index(c web.C, r *http.Request) (string, int) 
 	}
 	c.Env["Admin"], _ = controller.isAdmin(c, r)
 	c.Env["IsIndex"] = true
-	c.Env["Title"] = "Decred Voting Service - Welcome"
+	c.Env["Title"] = "Eacred Voting Service - Welcome"
 	c.Env["Designation"] = controller.Cfg.Designation
 
 	c.Env["Content"] = template.HTML(widgets)
@@ -1240,7 +1240,7 @@ func (controller *MainController) Index(c web.C, r *http.Request) (string, int) 
 // PasswordReset renders the password reset page. This shows the form where the
 // user enters their email address.
 func (controller *MainController) PasswordReset(c web.C, r *http.Request) (string, int) {
-	c.Env["Title"] = "Decred Voting Service - Password Reset"
+	c.Env["Title"] = "Eacred Voting Service - Password Reset"
 	session := controller.GetSession(c)
 	c.Env[csrf.TemplateTag] = csrf.TemplateField(r)
 	c.Env["FlashError"] = session.Flashes("passwordresetError")
@@ -1329,7 +1329,7 @@ func (controller *MainController) PasswordUpdate(c web.C, r *http.Request) (stri
 	c.Env[csrf.TemplateTag] = csrf.TemplateField(r)
 
 	render := func() string {
-		c.Env["Title"] = "Decred Voting Service - Password Update"
+		c.Env["Title"] = "Eacred Voting Service - Password Update"
 		c.Env["FlashError"] = session.Flashes("passwordupdateError")
 		c.Env["FlashSuccess"] = session.Flashes("passwordupdateSuccess")
 		c.Env["IsPasswordUpdate"] = true
@@ -1434,7 +1434,7 @@ func (controller *MainController) Settings(c web.C, r *http.Request) (string, in
 	t := controller.GetTemplate(c)
 	widgets := controller.Parse(t, "settings", c.Env)
 
-	c.Env["Title"] = "Decred Voting Service - Settings"
+	c.Env["Title"] = "Eacred Voting Service - Settings"
 	c.Env["Designation"] = controller.Cfg.Designation
 
 	c.Env["Content"] = template.HTML(widgets)
@@ -1571,7 +1571,7 @@ func (controller *MainController) Login(c web.C, r *http.Request) (string, int) 
 
 	widgets := controller.Parse(t, "auth/login", c.Env)
 
-	c.Env["Title"] = "Decred VSP - Login"
+	c.Env["Title"] = "Eacred VSP - Login"
 	c.Env["Designation"] = controller.Cfg.Designation
 
 	c.Env["Content"] = template.HTML(widgets)
@@ -1637,7 +1637,7 @@ func (controller *MainController) Register(c web.C, r *http.Request) (string, in
 	t := controller.GetTemplate(c)
 	widgets := controller.Parse(t, "auth/register", c.Env)
 
-	c.Env["Title"] = "Decred VSP - Register"
+	c.Env["Title"] = "Eacred VSP - Register"
 	c.Env["Designation"] = controller.Cfg.Designation
 
 	c.Env["Content"] = template.HTML(widgets)
@@ -1729,7 +1729,7 @@ func (controller *MainController) Stats(c web.C, r *http.Request) (string, int) 
 	t := controller.GetTemplate(c)
 	c.Env["Admin"], _ = controller.isAdmin(c, r)
 	c.Env["IsStats"] = true
-	c.Env["Title"] = "Decred VSP - Stats"
+	c.Env["Title"] = "Eacred VSP - Stats"
 
 	dbMap := controller.GetDbMap(c)
 
@@ -1742,7 +1742,7 @@ func (controller *MainController) Stats(c web.C, r *http.Request) (string, int) 
 		return "/error", http.StatusSeeOther
 	}
 
-	c.Env["DCRDataURL"] = controller.DCRDataURL
+	c.Env["ECRDataURL"] = controller.ECRDataURL
 
 	c.Env["PoolEmail"] = controller.Cfg.PoolEmail
 	c.Env["PoolFees"] = controller.Cfg.PoolFees
@@ -1824,8 +1824,8 @@ func (controller *MainController) Tickets(c web.C, r *http.Request) (string, int
 	}
 
 	c.Env["IsTickets"] = true
-	c.Env["DCRDataURL"] = controller.DCRDataURL
-	c.Env["Title"] = "Decred VSP - Tickets"
+	c.Env["ECRDataURL"] = controller.ECRDataURL
+	c.Env["Title"] = "Eacred VSP - Tickets"
 
 	dbMap := controller.GetDbMap(c)
 	user, _ := models.GetUserById(dbMap, session.Values["UserId"].(int64))
@@ -1968,7 +1968,7 @@ func (controller *MainController) Voting(c web.C, r *http.Request) (string, int)
 	c.Env["VoteVersion"] = controller.voteVersion
 
 	widgets := controller.Parse(t, "voting", c.Env)
-	c.Env["Title"] = "Decred Voting Service - Voting"
+	c.Env["Title"] = "Eacred Voting Service - Voting"
 	c.Env["Designation"] = controller.Cfg.Designation
 
 	c.Env["Content"] = template.HTML(widgets)

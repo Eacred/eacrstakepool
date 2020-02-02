@@ -1,4 +1,4 @@
-// Copyright (c) 2016-2018 The Decred developers
+// Copyright (c) 2016-2018 The Eacred developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -9,11 +9,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/decred/dcrstakepool/backend/stakepoold/rpc/server"
-	"github.com/decred/dcrstakepool/backend/stakepoold/stakepool"
-	"github.com/decred/dcrstakepool/backend/stakepoold/userdata"
-	"github.com/decred/dcrstakepool/signal"
-	"github.com/decred/slog"
+	"github.com/Eacred/eacrstakepool/backend/stakepoold/rpc/server"
+	"github.com/Eacred/eacrstakepool/backend/stakepoold/stakepool"
+	"github.com/Eacred/eacrstakepool/backend/stakepoold/userdata"
+	"github.com/Eacred/eacrstakepool/signal"
+	"github.com/Eacred/slog"
 	"github.com/jrick/logrotate/rotator"
 )
 

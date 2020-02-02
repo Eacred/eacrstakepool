@@ -1,16 +1,16 @@
 # dcrstakepool
 
-[![GoDoc](https://godoc.org/github.com/decred/dcrstakepool?status.svg)](https://godoc.org/github.com/decred/dcrstakepool)
-[![Build Status](https://github.com/decred/dcrstakepool/workflows/Build%20and%20Test/badge.svg)](https://github.com/decred/dcrstakepool/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/decred/dcrstakepool)](https://goreportcard.com/report/github.com/decred/dcrstakepool)
+[![GoDoc](https://godoc.org/github.com/Eacred/eacrstakepool?status.svg)](https://godoc.org/github.com/Eacred/eacrstakepool)
+[![Build Status](https://github.com/Eacred/eacrstakepool/workflows/Build%20and%20Test/badge.svg)](https://github.com/Eacred/eacrstakepool/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Eacred/eacrstakepool)](https://goreportcard.com/report/github.com/Eacred/eacrstakepool)
 
 dcrstakepool is a web application which coordinates generating 1-of-2 multisig
-addresses on a pool of [dcrwallet](https://github.com/decred/dcrwallet) servers
-so users can purchase [proof-of-stake tickets](https://docs.decred.org/mining/proof-of-stake/)
-on the [Decred](https://decred.org/) network and have the pool of wallet servers
+addresses on a pool of [eacrwallet](https://github.com/Eacred/eacrwallet) servers
+so users can purchase [proof-of-stake tickets](https://docs.eacred.org/mining/proof-of-stake/)
+on the [Eacred](https://eacred.org/) network and have the pool of wallet servers
 vote on their behalf when the ticket is selected.
 
-**NB:** In late 2018, [a proposal](https://proposals.decred.org/proposals/522652954ea7998f3fca95b9c4ca8907820eb785877dcf7fba92307131818c75)
+**NB:** In late 2018, [a proposal](https://proposals.eacred.org/proposals/522652954ea7998f3fca95b9c4ca8907820eb785877dcf7fba92307131818c75)
 was approved by stakeholders to rename "Stakepool" to "Voting Service Provider", a.k.a. "VSP".
 These names are used interchangably in this repository.
 
@@ -19,11 +19,11 @@ These names are used interchangably in this repository.
 
 ![Voting Service Architecture](docs/img/architecture.png)
 
-- It is highly recommended to use at least 2 dcrd+dcrwallet+stakepoold
+- It is highly recommended to use at least 2 ecrd+eacrwallet+stakepoold
   nodes (backend servers) for production use on mainnet.
   One backend server can be used on testnet.
 - Running dcrstakepool on mainnet is documented further at
-  [https://docs.decred.org](https://docs.decred.org/advanced/operating-a-vsp/).
+  [https://docs.eacred.org](https://docs.eacred.org/advanced/operating-a-vsp/).
 - The architecture is subject to change in the future to lessen the dependence
   on MySQL.
 
@@ -31,7 +31,7 @@ These names are used interchangably in this repository.
 ## Test Harness
 
 A test harness is provided in `./harness.sh`. The test harness uses tmux to start
-a dcrd node, multiple dcrwallet and stakepoold instances, and finally a dcrstakepool
+a ecrd node, multiple eacrwallet and stakepoold instances, and finally a dcrstakepool
 instance. It uses hard-coded wallet seeds and pubkeys, and as a result it is only
 suitable for use on testnet. Further documentation can be found in `./harness.sh`.
 
@@ -71,15 +71,15 @@ Please defer to the 1.5.0 [release notes](docs/release-note-1.5.0.md/#recommende
 
 ### Pre-requisites
 
-These instructions assume you are familiar with dcrd/dcrwallet.
+These instructions assume you are familiar with ecrd/eacrwallet.
 
-- Create basic dcrd/dcrwallet/dcrctl config files with usernames, passwords,
+- Create basic ecrd/eacrwallet/eacrctl config files with usernames, passwords,
   rpclisten, and network set appropriately within them or run example commands
   with additional flags as necessary.
 
-- Build/install dcrd and dcrwallet from latest master.
+- Build/install ecrd and eacrwallet from latest master.
 
-- Run dcrd instances and let them fully sync.
+- Run ecrd instances and let them fully sync.
 
 
 ### Voting service fees/cold wallet
@@ -89,16 +89,16 @@ These instructions assume you are familiar with dcrd/dcrwallet.
 - From your local machine...
 
 ```bash
-$ dcrwallet --create
-$ dcrwallet
+$ eacrwallet --create
+$ eacrwallet
 ```
 
 - Get the master pubkey for the account you wish to use. This will be needed to
-  configure dcrwallet and dcrstakepool.
+  configure eacrwallet and dcrstakepool.
 
 ```bash
-$ dcrctl --wallet createnewaccount stakepoolfees
-$ dcrctl --wallet getmasterpubkey stakepoolfees
+$ eacrctl --wallet createnewaccount stakepoolfees
+$ eacrctl --wallet getmasterpubkey stakepoolfees
 ```
 
 - Mark 10000 addresses in use for the account so the wallet will recognize
@@ -106,7 +106,7 @@ $ dcrctl --wallet getmasterpubkey stakepoolfees
   UserId 2 to address 2, and so on.
 
 ```bash
-$ dcrctl --wallet accountsyncaddressindex teststakepoolfees 0 10000
+$ eacrctl --wallet accountsyncaddressindex teststakepoolfees 0 10000
 ```
 
 ### Voting service voting wallets
@@ -118,19 +118,19 @@ $ dcrctl --wallet accountsyncaddressindex teststakepoolfees 0 10000
 
 ```bash
 $ ssh walletserver1
-$ dcrwallet --create
+$ eacrwallet --create
 ```
 
-- Start a properly configured dcrwallet and unlock it. See
-  sample-dcrwallet.conf.
+- Start a properly configured eacrwallet and unlock it. See
+  sample-eacrwallet.conf.
 - From your local machine...
 
 ```bash
-$ cp sample-dcrwallet.conf dcrwallet.conf
-$ vim dcrwallet.conf
-$ scp dcrwallet.conf walletserver1:~/.dcrwallet/
+$ cp sample-eacrwallet.conf eacrwallet.conf
+$ vim eacrwallet.conf
+$ scp eacrwallet.conf walletserver1:~/.eacrwallet/
 $ ssh walletserver1
-$ dcrwallet
+$ eacrwallet
 ```
 
 - Get the master pubkey from the default account.  This will be used for
@@ -138,7 +138,7 @@ $ dcrwallet
 
 ```bash
 $ ssh walletserver1
-$ dcrctl --wallet getmasterpubkey default
+$ eacrctl --wallet getmasterpubkey default
 ```
 
 ### MySQL
@@ -189,14 +189,14 @@ $ scp stakepoold walletserver2:~/
 
 ### dcrstakepool setup
 
-- Create the .dcrstakepool directory and copy dcrwallet certs to it:
+- Create the .dcrstakepool directory and copy eacrwallet certs to it:
 
 ```bash
 $ ssh frontendserver
 $ mkdir ~/.dcrstakepool
 $ cd ~/.dcrstakepool
-$ scp walletserver1:~/.dcrwallet/rpc.cert wallet1.cert
-$ scp walletserver2:~/.dcrwallet/rpc.cert wallet2.cert
+$ scp walletserver1:~/.eacrwallet/rpc.cert wallet1.cert
+$ scp walletserver2:~/.eacrwallet/rpc.cert wallet2.cert
 $ scp walletserver1:~/.stakepoold/rpc.cert stakepoold1.cert
 $ scp walletserver2:~/.stakepoold/rpc.cert stakepoold2.cert
 ```
@@ -291,11 +291,11 @@ were processed.
 
 ### For v1.1.1 and below
 
-If a user pays an incorrect fee you may add their tickets like so (requires dcrd
+If a user pays an incorrect fee you may add their tickets like so (requires ecrd
 running with `txindex=1`):
 
 ```bash
-dcrctl --wallet stakepooluserinfo "MultiSigAddress" | grep -Pzo '(?<="invalid": \[)[^\]]*' | tr -d , | xargs -Itickethash dcrctl --wallet getrawtransaction tickethash | xargs -Itickethex dcrctl --wallet addticket "tickethex"
+eacrctl --wallet stakepooluserinfo "MultiSigAddress" | grep -Pzo '(?<="invalid": \[)[^\]]*' | tr -d , | xargs -Itickethash eacrctl --wallet getrawtransaction tickethash | xargs -Itickethex eacrctl --wallet addticket "tickethex"
 ```
 
 ## Backups, monitoring, security considerations
@@ -325,8 +325,8 @@ dcrctl --wallet stakepooluserinfo "MultiSigAddress" | grep -Pzo '(?<="invalid": 
 ## Getting help
 
 To get help with `dcrstakepool` please create a
-[GitHub issue](https://github.com/decred/dcrstakepool/issues)
-or the join the [Decred community](https://decred.org/community/)
+[GitHub issue](https://github.com/Eacred/eacrstakepool/issues)
+or the join the [Eacred community](https://eacred.org/community/)
 using your preferred chat platform.
 
 ## License

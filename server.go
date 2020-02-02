@@ -1,4 +1,4 @@
-// Copyright (c) 2016-2019 The Decred developers
+// Copyright (c) 2016-2019 The Eacred developers
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
@@ -15,12 +15,12 @@ import (
 
 	"github.com/gorilla/csrf"
 
-	"github.com/decred/dcrd/rpcclient/v4"
-	"github.com/decred/dcrstakepool/controllers"
-	"github.com/decred/dcrstakepool/email"
-	"github.com/decred/dcrstakepool/signal"
-	"github.com/decred/dcrstakepool/stakepooldclient"
-	"github.com/decred/dcrstakepool/system"
+	"github.com/Eacred/eacrd/rpcclient"
+	"github.com/Eacred/eacrstakepool/controllers"
+	"github.com/Eacred/eacrstakepool/email"
+	"github.com/Eacred/eacrstakepool/signal"
+	"github.com/Eacred/eacrstakepool/stakepooldclient"
+	"github.com/Eacred/eacrstakepool/system"
 
 	"github.com/zenazn/goji/web"
 	"github.com/zenazn/goji/web/middleware"
