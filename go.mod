@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/DATA-DOG/go-sqlmock v1.4.0
 	github.com/Eacred/eacrd v0.0.0-20200130225131-86d11748c652
+	github.com/Eacred/eacrdata v0.0.0-20200205013734-c9ddbe3e597e
 	github.com/Eacred/eacrwallet v0.0.0-20200130085721-a8bc15909293
 	github.com/Eacred/slog v1.0.1
 	github.com/dajohi/goemail v1.0.1
@@ -26,5 +27,5 @@ require (
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	golang.org/x/crypto v0.0.0-20200128174031-69ecbb4d6d5d
 	golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa
-	google.golang.org/grpc v1.27.0
+//google.golang.org/grpc v1.27.0
 )
